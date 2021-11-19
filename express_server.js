@@ -19,6 +19,11 @@ app.get('/urls.json', (req, res) => {
   res.json(constants.URL_DATABASE);
 });
 
+app.get('/urls', (req, res) => {
+  const templateVars = { urlDatabase: constants.URL_DATABASE };
+  res.render('urls_index', templateVars);
+});
+
 app.listen(constants.PORT, () => {
   lg(`Example app listening on port ${constants.PORT}`, "App");
 });
