@@ -5,9 +5,16 @@ const { lg } = require("@jowe81/lg");
 const express = require("express");
 const app = express();
 
+app.get('/', (req, res) => {
+  res.send("Hello");
+});
 
-app.get('/', (req,res) => {
-  res.send("Hello!");
+app.get('/hello', (req, res) => {
+  res.send("<html><body>Hello <b>World</b></body></html>\n");
+});
+
+app.get('/urls.json', (req, res) => {
+  res.json(constants.URL_DATABASE);
 });
 
 app.listen(constants.PORT, () => {
