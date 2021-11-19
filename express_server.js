@@ -20,8 +20,15 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const templateVars = { urlDatabase: constants.URL_DATABASE };
+  const templateVars = { urls: constants.URL_DATABASE };
   res.render('urls_index', templateVars);
+});
+
+app.get('/urls/:shortURL', (req, res) => {
+  const shortURL = req.params.shortURL;
+  const longURL = constants.URL_DATABASE[shortURL];
+  const templateVars = { shortURL, longURL };
+  res.render('urls_show', templateVars);
 });
 
 app.listen(constants.PORT, () => {
