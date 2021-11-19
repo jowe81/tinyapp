@@ -1,5 +1,7 @@
 const constants = require("./constants");
 
+const { lg } = require("@jowe81/lg");
+
 const express = require("express");
 const app = express();
 
@@ -9,6 +11,6 @@ app.get('/', (req,res) => {
 });
 
 app.listen(constants.PORT, () => {
-  console.log(`Example app listening on port ${constants.PORT}`);
+  lg(`Example app listening on port ${constants.PORT}`, "App");
 });
 
