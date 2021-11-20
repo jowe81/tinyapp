@@ -85,7 +85,7 @@ app.get('/u/:shortURL', (req, res) => {
   const longURL = URL_DATABASE[req.params.shortURL];
   if (longURL !== undefined) {
     lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${longURL}`);
-    res.redirect(longURL);  
+    res.redirect(longURL);
   } else {
     //Invalid shortURL - redirect to home page
     lg(`Invalid shortURL from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
