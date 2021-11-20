@@ -75,6 +75,14 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   res.redirect('/urls');
 });
 
+app.post('/urls/:shortURL/update', (req, res) => {
+  const shortURL = req.params.shortURL;
+  const longURL = req.body.longURL;
+  lg(`Updating ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
+  URL_DATABASE[req.params.shortURL] = longURL;
+  res.redirect('/urls');
+});
+
 //Render info page for URL indicated by :shortURL
 app.get('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
