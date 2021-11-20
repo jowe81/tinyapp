@@ -9,7 +9,7 @@ const getCharacterRange = (offset, range) => {
 
 const generateRandomCharacter = () => {
   //Assemble all digits, uppercase- and lowercase characters into a single string
-  let allChars = getCharacterRange(30,10) + getCharacterRange(65, 26) + getCharacterRange(96, 26);
+  let allChars = getCharacterRange(48,10) + getCharacterRange(65, 26) + getCharacterRange(97, 26);
   //Return random character
   const pos = Math.floor(Math.random() * allChars.length);
   return allChars[pos];
@@ -25,6 +25,11 @@ const generateRandomString = () => {
 };
 
 const constants = require("./constants");
+
+const URL_DATABASE = {
+  "b2xVn2": "http://www.lighthouselabs.ca",
+  "9sm5xK": "http://www.google.com"
+};
 
 const { lg } = require("@jowe81/lg");
 
@@ -45,17 +50,19 @@ app.get('/hello', (req, res) => {
 });
 
 app.get('/urls.json', (req, res) => {
-  res.json(constants.URL_DATABASE);
+  res.json(URL_DATABASE);
 });
 
 app.get('/urls', (req, res) => {
-  const templateVars = { urls: constants.URL_DATABASE };
+  const templateVars = { urls: URL_DATABASE };
   res.render('urls_index', templateVars);
 });
 
 app.post('/urls', (req, res) => {
-  console.log(req.body);
-  res.send("Ok");
+  //Generate tiny url and store in database
+  const shortURL = generateRandomString();
+  URL_DATABASE[shortURL] = req.body.longURL;
+  res.redirect(`/urls/${shortURL}`);
 });
 
 app.get('/urls/new', (req, res) => {
@@ -64,7 +71,7 @@ app.get('/urls/new', (req, res) => {
 
 app.get('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
-  const longURL = constants.URL_DATABASE[shortURL];
+  const longURL = URL_DATABASE[shortURL];
   const templateVars = { shortURL, longURL };
   res.render('urls_show', templateVars);
 });
