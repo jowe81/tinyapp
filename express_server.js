@@ -42,45 +42,55 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 app.set('view engine','ejs');
 
-app.get('/', (req, res) => {
-  res.send("Hello");
-});
-
-app.get('/hello', (req, res) => {
-  res.send("<html><body>Hello <b>World</b></body></html>\n");
-});
-
+//Get URL table as JSON
 app.get('/urls.json', (req, res) => {
   res.json(URL_DATABASE);
 });
 
-app.get('/urls', (req, res) => {
+//Render a list of all stored URLs
+app.get(['/urls','/'], (req, res) => {
   const templateVars = { urls: URL_DATABASE };
   res.render('urls_index', templateVars);
 });
 
+//Generate and store shortURL, then redirect to URL info page
 app.post('/urls', (req, res) => {
-  //Generate tiny url and store in database
   const shortURL = generateRandomString();
   URL_DATABASE[shortURL] = req.body.longURL;
   res.redirect(`/urls/${shortURL}`);
 });
 
+//Render form to create a new shortURL
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
 });
 
+//Render info page for URL indicated by :shortURL
 app.get('/urls/:shortURL', (req, res) => {
   const shortURL = req.params.shortURL;
   const longURL = URL_DATABASE[shortURL];
-  const templateVars = { shortURL, longURL };
-  res.render('urls_show', templateVars);
+  if (longURL !== undefined) {
+    lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
+    const templateVars = { shortURL, longURL };
+    res.render('urls_show', templateVars);
+  } else {
+    //Invalid shortURL - redirect to URL list
+    lg(`Invalid shortURL from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
+    res.redirect(`/urls`);
+  }
 });
 
+//Redirect from :shortURL to its target
 app.get('/u/:shortURL', (req, res) => {
   const longURL = URL_DATABASE[req.params.shortURL];
-  lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${longURL}`);
-  res.redirect(longURL);
+  if (longURL !== undefined) {
+    lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${longURL}`);
+    res.redirect(longURL);  
+  } else {
+    //Invalid shortURL - redirect to home page
+    lg(`Invalid shortURL from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
+    res.redirect(`/urls`);
+  }
 });
 
 
