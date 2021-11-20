@@ -31,7 +31,8 @@ const URL_DATABASE = {
   "9sm5xK": "http://www.google.com"
 };
 
-const { lg } = require("@jowe81/lg");
+const { lg, prefix } = require("@jowe81/lg");
+prefix.set("Server");
 
 const express = require("express");
 const app = express();
@@ -76,8 +77,14 @@ app.get('/urls/:shortURL', (req, res) => {
   res.render('urls_show', templateVars);
 });
 
+app.get('/u/:shortURL', (req, res) => {
+  const longURL = URL_DATABASE[req.params.shortURL];
+  lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${longURL}`);
+  res.redirect(longURL);
+});
+
 
 app.listen(constants.PORT, () => {
-  lg(`Example app listening on port ${constants.PORT}`, "App");
+  lg(`Server listening on port ${constants.PORT}`, "App");
 });
 
