@@ -56,13 +56,23 @@ app.get(['/urls','/'], (req, res) => {
 //Generate and store shortURL, then redirect to URL info page
 app.post('/urls', (req, res) => {
   const shortURL = generateRandomString();
-  URL_DATABASE[shortURL] = req.body.longURL;
+  const longURL = req.body.longURL;
+  lg(`Creating new shortURL (${shortURL}) for ${longURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
+  URL_DATABASE[shortURL] = longURL;
   res.redirect(`/urls/${shortURL}`);
 });
 
 //Render form to create a new shortURL
 app.get('/urls/new', (req, res) => {
   res.render('urls_new');
+});
+
+//Delete entry, redirect to index
+app.post('/urls/:shortURL/delete', (req, res) => {
+  const shortURL = req.params.shortURL;
+  lg(`Deleting ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
+  delete URL_DATABASE[req.params.shortURL];
+  res.redirect('/urls');
 });
 
 //Render info page for URL indicated by :shortURL
@@ -79,6 +89,7 @@ app.get('/urls/:shortURL', (req, res) => {
     res.redirect(`/urls`);
   }
 });
+
 
 //Redirect from :shortURL to its target
 app.get('/u/:shortURL', (req, res) => {
