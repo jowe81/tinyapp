@@ -37,10 +37,22 @@ prefix.set("Server");
 const express = require("express");
 const app = express();
 
+//Setup middleware
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
 
+//Use EJS templating engine
 app.set('view engine','ejs');
+
+//Routes handlers below
+
+//Create cookie with username, redirect to URL list
+app.post('/login', (req, res) => {
+  res.cookie("username", req.body.username);
+  res.redirect('/urls');
+});
 
 //Get URL table as JSON
 app.get('/urls.json', (req, res) => {
@@ -49,7 +61,7 @@ app.get('/urls.json', (req, res) => {
 
 //Render a list of all stored URLs
 app.get(['/urls','/'], (req, res) => {
-  const templateVars = { urls: URL_DATABASE };
+  const templateVars = { urls: URL_DATABASE, username: req.cookies.username };
   res.render('urls_index', templateVars);
 });
 
@@ -64,7 +76,8 @@ app.post('/urls', (req, res) => {
 
 //Render form to create a new shortURL
 app.get('/urls/new', (req, res) => {
-  res.render('urls_new');
+  const templateVars = { username: req.cookies.username };
+  res.render('urls_new', templateVars);
 });
 
 //Delete entry, redirect to index
@@ -75,6 +88,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   res.redirect('/urls');
 });
 
+//Edit entry
 app.post('/urls/:shortURL/update', (req, res) => {
   const shortURL = req.params.shortURL;
   const longURL = req.body.longURL;
@@ -89,7 +103,7 @@ app.get('/urls/:shortURL', (req, res) => {
   const longURL = URL_DATABASE[shortURL];
   if (longURL !== undefined) {
     lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
-    const templateVars = { shortURL, longURL };
+    const templateVars = { shortURL, longURL, username: req.cookies.username };
     res.render('urls_show', templateVars);
   } else {
     //Invalid shortURL - redirect to URL list

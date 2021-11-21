@@ -12,3 +12,15 @@
     </div>
   </nav>
 </header>
+<div>
+  <form method="POST" action="/login">
+    User (
+    <% if (username !== undefined) { %>
+      <%= username %>
+    <% } else { %>
+      not logged in
+    <% } %>
+    ): <input name="username">
+    <button>Login</button>
+  </form>
+</div>
