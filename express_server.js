@@ -1,30 +1,6 @@
-const getCharacterRange = (offset, range) => {
-  let i;
-  let chars = "";
-  for (i = offset; i < offset + range; i++) {
-    chars += String.fromCharCode(i);
-  }
-  return chars;
-};
-
-const generateRandomCharacter = () => {
-  //Assemble all digits, uppercase- and lowercase characters into a single string
-  let allChars = getCharacterRange(48,10) + getCharacterRange(65, 26) + getCharacterRange(97, 26);
-  //Return random character
-  const pos = Math.floor(Math.random() * allChars.length);
-  return allChars[pos];
-};
-
-const generateRandomString = () => {
-  const length = 6;
-  let str = "";
-  for (let i = 0; i < length; i++) {
-    str += generateRandomCharacter();
-  }
-  return str;
-};
 
 const constants = require("./constants");
+const helpers = require("./helpers");
 
 const URL_DATABASE = {
   "b2xVn2": "http://www.lighthouselabs.ca",
@@ -77,7 +53,7 @@ app.get(['/urls','/'], (req, res) => {
 
 //Generate and store shortURL, then redirect to URL info page
 app.post('/urls', (req, res) => {
-  const shortURL = generateRandomString();
+  const shortURL = helpers.generateRandomString();
   const longURL = req.body.longURL;
   lg(`Creating new shortURL (${shortURL}) for ${longURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
   URL_DATABASE[shortURL] = longURL;
