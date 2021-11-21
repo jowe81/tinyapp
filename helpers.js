@@ -1,3 +1,5 @@
+//helpers.js: various helper functions
+
 const getCharacterRange = (offset, range) => {
   let i;
   let chars = "";
