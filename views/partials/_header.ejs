@@ -10,18 +10,16 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
     </div>
+    <% if (username === undefined) { %>
+      <form class="form-inline my-2 my-lg-0" method="POST" action="/login">
+        <span class="text-light mx-2">User: <input name="username"></span>
+        <button class="btn btn-outline-light">Login</button>
+      </form>  
+    <% } else { %>
+      <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+        <span class="text-light mx-2">You are logged in as <strong><%= username %></strong>. </span>
+        <button class="btn btn-outline-light">Logout</button>
+      </form>  
+    <% } %>
   </nav>
 </header>
-<div>
-  <% if (username === undefined) { %>
-    <form method="POST" action="/login">
-      User: <input name="username">
-      <button>Login</button>
-    </form>  
-  <% } else { %>
-    <form method="POST" action="/logout">
-      You are logged in as <%= username %>
-      <button>Logout</button>
-    </form>  
-  <% } %>
-</div>
