@@ -40,8 +40,8 @@ const isValidEmail = (email) => {
 
 //Return true if user with email email exists in users
 const emailExists = (users, email) => {
-  for (const user in users) {
-    if (user.email && user.email === email) {
+  for (const userID in users) {
+    if (users[userID].email && users[userID].email === email) {
       return true;
     }
   }
