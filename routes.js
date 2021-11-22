@@ -73,10 +73,9 @@ const registerRoutes = (app) => {
 
   //Generate and store shortURL (must be logged in), then redirect to URL info page
   app.post('/urls', loginChecker, (req, res) => {
-    const shortURL = helpers.generateID();
     const longURL = req.body.longURL;
-    lg(`Creating new shortURL (${shortURL}) for ${longURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
-    database.urls[shortURL] = longURL;
+    const shortURL = database.addURL(longURL, req.cookies.user_id);
+    lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
     res.redirect(`/urls/${shortURL}`);
   });
 
