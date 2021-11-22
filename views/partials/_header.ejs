@@ -16,7 +16,7 @@
           <a href="/login" class="btn btn-outline-light mx-2">Login</a>
         <% } else { %>
           <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
-            <span class="text-light mx-2"><strong><%= user.email %></strong> </span>
+            <span class="text-light mx-2">Logged in as <strong><%= user.email %></strong> </span>
             <button class="btn btn-outline-light">Logout</button>
           </form>  
         <% } %>
