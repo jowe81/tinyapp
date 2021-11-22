@@ -6,6 +6,13 @@ const urls = {
   "9sm5xK": "http://www.google.com"
 };
 
+const addURL = (longURL, userID) => {
+  const shortURL = helpers.generateID();
+  urls[shortURL] = { longURL: longURL, userID: userID };
+  return shortURL;
+};
+
+
 const users = {
   "rndmID": {
     id: "rndmID",
@@ -57,6 +64,7 @@ const validateUserCredentials = (email, password) => {
 
 module.exports = {
   urls,
+  addURL,
   users,
   addUser,
   getUserByID,
