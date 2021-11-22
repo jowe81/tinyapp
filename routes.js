@@ -12,16 +12,22 @@ const registerRoutes = (app) => {
     res.render('login');
   });
 
-  //Process login, redirect to URL list
+  //Process login, redirect to /urls
   app.post('/login', (req, res) => {
-    res.cookie("username", req.body.username);
+    const loggedInUserID = database.validateUserCredentials(req.body.email, req.body.password);
+    if (loggedInUserID) {
+      lg(`User ${loggedInUserID} (${req.body.email}) logged in`);
+      res.cookie("user_id", loggedInUserID);
+    } else {
+      lg(`Login attempt for ${req.body.email} failed`, "UI");
+    }
     res.redirect('/urls');
   });
 
-  //Process logout
+  //Process logout, redirect to /urls
   app.post('/logout', (req, res) => {
     res.clearCookie("user_id");
-    res.redirect("/login");
+    res.redirect("/urls");
   });
 
   //Render user registration form
