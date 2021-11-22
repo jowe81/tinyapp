@@ -21,14 +21,14 @@ const getURLs = (userID) => {
   const output = {};
   for (const shortURL in urls) {
     if (!userID || urls[shortURL].userID === userID) {
-      output.shortURL = urls[shortURL];
+      output[shortURL] = urls[shortURL];
     }
   }
   return output;
 };
 
 //Return urls owned by user
-const urlsForUser = (userID) => urlsForUser(userID);
+const urlsForUser = (userID) => getURLs(userID);
 
 
 
