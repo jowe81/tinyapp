@@ -37,6 +37,7 @@ const registerRoutes = (app) => {
         res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
         //Email exists already
+        lg(`Attempt to add new user failed`);
         res.statusCode = 400;
         res.end("Email address already exists\n");
       }
