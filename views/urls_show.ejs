@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <title>URL - TinyApp Example</title>
-</head>
-
-<body>
-  <%- include('partials/_header') %>
-  <main>
-    <div class="card text-center">
-        <div class="card-header"></div>
-        <div class="card-body">
-          <h5 class="card-title">TinyURL for: <%= longURL %></h5>
-          <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
-          <h5 class="card-title">Edit:</h5>
-          <p>
-            <form method = "POST" action = "/urls/<%= shortURL %>/update">
-              <input name="longURL" value="<%= longURL %>">
-              <button type="submit">Update</button>
-            </form>
-          </p>
-        </div>
-      <div class="card-footer text-muted"></div>
-    </div>
-  </main>
-  <%- include('partials/_scripts') %>
-</body>
+  <head>
+    <%- include('partials/_meta_and_link') %>
+    <title>URL Record - TinyApp</title>
+  </head>
+  <body>
+    <%- include('partials/_header') %>
+    <main>
+      <div class="card text-center">
+          <div class="card-header"></div>
+          <div class="card-body">
+            <h5 class="card-title">TinyURL for: <%= longURL %></h5>
+            <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
+            <h5 class="card-title">Edit:</h5>
+            <p>
+              <form method = "POST" action = "/urls/<%= shortURL %>/update">
+                <input name="longURL" value="<%= longURL %>">
+                <button type="submit">Update</button>
+              </form>
+            </p>
+          </div>
+        <div class="card-footer text-muted"></div>
+      </div>
+    </main>
+    <%- include('partials/_scripts') %>
+  </body>
 </html>
