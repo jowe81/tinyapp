@@ -14,11 +14,26 @@ const addURL = (longURL, userID) => {
 
 const updateURL = (shortURL, longURL) => {
   urls[shortURL].longURL = longURL;
-}
-
-const getURL = (shortURL) => {
-  return urls[shortURL];
 };
+
+//Return urls owned by user userID, or all urls not specified
+const getURLs = (userID) => {
+  const output = {};
+  for (const shortURL in urls) {
+    if (!userID || urls[shortURL].userID === userID) {
+      output.shortURL = urls[shortURL];
+    }
+  }
+  return output;
+};
+
+//Return urls owned by user
+const urlsForUser = (userID) => urlsForUser(userID);
+
+
+
+
+
 
 const users = {
   "rndmID": {
@@ -73,7 +88,8 @@ module.exports = {
   urls,
   addURL,
   updateURL,
-  getURL,
+  getURLs,
+  urlsForUser,
   users,
   addUser,
   getUserByID,
