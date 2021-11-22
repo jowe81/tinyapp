@@ -1,5 +1,6 @@
 //routes.js: all HTTP routes are registered here - exports registerRoutes(app)
 
+const constants = require("./constants");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
@@ -38,15 +39,21 @@ const registerRoutes = (app) => {
 
   //Register a new user, redirect to /urls
   app.post('/register', (req, res) => {
-    const userID = helpers.generateRandomString();
-    users[userID] = {
-      id: userID,
-      email: req.body.email,
-      password: req.body.password,
-    };
-    res.cookie('user_id', userID);
-    lg(`Added user ${JSON.stringify(users[userID])}`);
-    res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
+    if (helpers.isValidEmail(req.body.email) && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
+      const userID = helpers.generateID();
+      users[userID] = {
+        id: userID,
+        email: req.body.email,
+        password: req.body.password,
+      };
+      res.cookie('user_id', userID);
+      lg(`Added user ${JSON.stringify(users[userID])}`);
+      res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
+    } else {
+      //Invalid email addres and/or empty password
+      res.statusCode = 400;
+      res.end();
+    }
   });
 
   //Get URL table as JSON
@@ -62,7 +69,7 @@ const registerRoutes = (app) => {
 
   //Generate and store shortURL, then redirect to URL info page
   app.post('/urls', (req, res) => {
-    const shortURL = helpers.generateRandomString();
+    const shortURL = helpers.generateID();
     const longURL = req.body.longURL;
     lg(`Creating new shortURL (${shortURL}) for ${longURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
     urlDatabase[shortURL] = longURL;
