@@ -1,6 +1,7 @@
 //routes.js: all HTTP routes are registered here - exports registerRoutes(app)
 
 const constants = require("./constants");
+const database = require("./database");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
@@ -21,7 +22,7 @@ const registerRoutes = (app) => {
 
   //Render user registration form
   app.get('/register', (req, res) => {
-    const templateVars = { user:users[req.cookies.user_id] };
+    const templateVars = { user:database.users[req.cookies.user_id] };
     res.render('register', templateVars);
   });
 
@@ -29,16 +30,16 @@ const registerRoutes = (app) => {
   app.post('/register', (req, res) => {
     if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
       //Form data is valid
-      if (!helpers.emailExists(users, req.body.email)) {
+      if (!helpers.emailExists(database.usersusers, req.body.email)) {
         //Email address is available
         const userID = helpers.generateID();
-        users[userID] = {
+        database.users[userID] = {
           id: userID,
           email: req.body.email,
           password: req.body.password,
         };
         res.cookie('user_id', userID);
-        lg(`Added user ${JSON.stringify(users[userID])}`);
+        lg(`Added user ${JSON.stringify(database.users[userID])}`);
         res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
         //Email exists already
@@ -54,12 +55,12 @@ const registerRoutes = (app) => {
 
   //Get URL table as JSON
   app.get('/urls.json', (req, res) => {
-    res.json(urlDatabase);
+    res.json(database.urls);
   });
 
   //Render a list of all stored URLs
   app.get(['/urls','/'], (req, res) => {
-    const templateVars = { urls: urlDatabase, user:users[req.cookies.user_id] };
+    const templateVars = { urls: database.urls, user:database.users[req.cookies.user_id] };
     res.render('urls_index', templateVars);
   });
 
@@ -68,13 +69,13 @@ const registerRoutes = (app) => {
     const shortURL = helpers.generateID();
     const longURL = req.body.longURL;
     lg(`Creating new shortURL (${shortURL}) for ${longURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
-    urlDatabase[shortURL] = longURL;
+    database.urls[shortURL] = longURL;
     res.redirect(`/urls/${shortURL}`);
   });
 
   //Render form to create a new shortURL
   app.get('/urls/new', (req, res) => {
-    const templateVars = { user:users[req.cookies.user_id] };
+    const templateVars = { user:database.users[req.cookies.user_id] };
     res.render('urls_new', templateVars);
   });
 
@@ -82,7 +83,7 @@ const registerRoutes = (app) => {
   app.post('/urls/:shortURL/delete', (req, res) => {
     const shortURL = req.params.shortURL;
     lg(`Deleting ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
-    delete urlDatabase[req.params.shortURL];
+    delete database.urls[req.params.shortURL];
     res.redirect('/urls');
   });
 
@@ -91,17 +92,17 @@ const registerRoutes = (app) => {
     const shortURL = req.params.shortURL;
     const longURL = req.body.longURL;
     lg(`Updating ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
-    urlDatabase[req.params.shortURL] = longURL;
+    database.urls[req.params.shortURL] = longURL;
     res.redirect('/urls');
   });
 
   //Render info page for URL indicated by :shortURL
   app.get('/urls/:shortURL', (req, res) => {
     const shortURL = req.params.shortURL;
-    const longURL = urlDatabase[shortURL];
+    const longURL = database.urls[shortURL];
     if (longURL !== undefined) {
       lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
-      const templateVars = { shortURL, longURL, user:users[req.cookies.user_id] };
+      const templateVars = { shortURL, longURL, user:database.users[req.cookies.user_id] };
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL - redirect to URL list
@@ -113,7 +114,7 @@ const registerRoutes = (app) => {
 
   //Redirect from :shortURL to its target
   app.get('/u/:shortURL', (req, res) => {
-    const longURL = urlDatabase[req.params.shortURL];
+    const longURL = database.urls[req.params.shortURL];
     if (longURL !== undefined) {
       lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${longURL}`);
       res.redirect(longURL);
