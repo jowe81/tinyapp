@@ -39,20 +39,28 @@ const registerRoutes = (app) => {
 
   //Register a new user, redirect to /urls
   app.post('/register', (req, res) => {
-    if (helpers.isValidEmail(req.body.email) && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
-      const userID = helpers.generateID();
-      users[userID] = {
-        id: userID,
-        email: req.body.email,
-        password: req.body.password,
-      };
-      res.cookie('user_id', userID);
-      lg(`Added user ${JSON.stringify(users[userID])}`);
-      res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
+    if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
+      //Form data is valid
+      if (!helpers.emailExists(req.body.email)) {
+        //Email address is available
+        const userID = helpers.generateID();
+        users[userID] = {
+          id: userID,
+          email: req.body.email,
+          password: req.body.password,
+        };
+        res.cookie('user_id', userID);
+        lg(`Added user ${JSON.stringify(users[userID])}`);
+        res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect  
+      } else {
+        //Email exists already
+        res.statusCode = 400;
+        res.end("Email address already exists\n");
+      }
     } else {
-      //Invalid email addres and/or empty password
+      //Invalid email address and/or password too short
       res.statusCode = 400;
-      res.end();
+      res.end("Invalid email address and/or password too short\n");
     }
   });
 
