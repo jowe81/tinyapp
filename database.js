@@ -28,6 +28,16 @@ const addUser = (email, password) => {
   return false;
 };
 
+//Return user object if user with id exists
+const getUserByID = (id) => {
+  for (const userID in users) {
+    if (userID === id) {
+      return users[userID];
+    }
+  }
+  return false;
+};
+
 //Return user object if user with email exists
 const getUserByEmail = (email) => {
   for (const userID in users) {
@@ -44,4 +54,12 @@ const validateUserCredentials = (email, password) => {
   return user && user.password === password ? user.id : false;
 };
 
-module.exports = { urls, users, addUser, getUserByEmail, validateUserCredentials };
+
+module.exports = {
+  urls,
+  users,
+  addUser,
+  getUserByID,
+  getUserByEmail,
+  validateUserCredentials
+};
