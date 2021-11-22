@@ -16,6 +16,11 @@ const updateURL = (shortURL, longURL) => {
   urls[shortURL].longURL = longURL;
 };
 
+//Return a URL object. If userID is provided, only return if user owns the object.
+const getURL = (shortURL, userID) => {
+  return !userID || urls[shortURL].userID === userID ? urls[shortURL] : false;
+};
+
 //Return urls owned by user userID, or all urls not specified
 const getURLs = (userID) => {
   const output = {};
@@ -28,7 +33,7 @@ const getURLs = (userID) => {
 };
 
 //Return urls owned by user
-const urlsForUser = (userID) => getURLs(userID);
+const urlsForUser = (userID) => userID ? getURLs(userID) : {};
 
 
 
@@ -88,6 +93,7 @@ module.exports = {
   urls,
   addURL,
   updateURL,
+  getURL,
   getURLs,
   urlsForUser,
   users,

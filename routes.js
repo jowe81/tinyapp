@@ -65,9 +65,10 @@ const registerRoutes = (app) => {
     res.json(database.urls);
   });
 
-  //Render a list of all stored URLs
+  //Render a list of all stored URLs for currently logged-in user
   app.get(['/urls','/'], (req, res) => {
-    const templateVars = { urls: database.urls, user:database.users[req.cookies.user_id] };
+    console.log(database.urlsForUser(req.cookies.user_id));
+    const templateVars = { urls: database.urlsForUser(req.cookies.user_id), user:database.users[req.cookies.user_id] };
     res.render('urls_index', templateVars);
   });
 
@@ -85,16 +86,16 @@ const registerRoutes = (app) => {
     res.render('urls_new', templateVars);
   });
 
-  //Delete entry, redirect to index
-  app.post('/urls/:shortURL/delete', (req, res) => {
+  //Delete entry (must be logged in), redirect to index
+  app.post('/urls/:shortURL/delete', loginChecker, (req, res) => {
     const shortURL = req.params.shortURL;
     lg(`Deleting ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
     delete database.urls[req.params.shortURL];
     res.redirect('/urls');
   });
 
-  //Edit/Update entry
-  app.post('/urls/:shortURL/update', (req, res) => {
+  //Edit/Update entry (must be logged in)
+  app.post('/urls/:shortURL/update', loginChecker, (req, res) => {
     const shortURL = req.params.shortURL;
     const longURL = req.body.longURL;
     lg(`Updating ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
@@ -102,10 +103,10 @@ const registerRoutes = (app) => {
     res.redirect('/urls');
   });
 
-  //Render info page for URL indicated by :shortURL
-  app.get('/urls/:shortURL', (req, res) => {
+  //Render info page for URL indicated by :shortURL (must be logged in AND own the URL)
+  app.get('/urls/:shortURL', loginChecker, (req, res) => {
     const shortURL = req.params.shortURL;
-    const URLObject = database.getURL(shortURL);
+    const URLObject = database.getURL(shortURL, req.cookies.user_id);
     if (URLObject) {
       lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
       const templateVars = { shortURL, URLObject, user:database.users[req.cookies.user_id] };
