@@ -8,6 +8,10 @@ const { lg } = require("@jowe81/lg");
 
 const registerRoutes = (app) => {
 
+  app.get('/login', (req, res) => {
+    res.render('login');
+  });
+
   //Process login, redirect to URL list
   app.post('/login', (req, res) => {
     res.cookie("username", req.body.username);
@@ -17,7 +21,7 @@ const registerRoutes = (app) => {
   //Process logout
   app.post('/logout', (req, res) => {
     res.clearCookie("user_id");
-    res.redirect("/urls");
+    res.redirect("/login");
   });
 
   //Render user registration form
