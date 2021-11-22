@@ -10,12 +10,12 @@
       <div class="card text-center">
           <div class="card-header"></div>
           <div class="card-body">
-            <h5 class="card-title">TinyURL for: <%= longURL %></h5>
+            <h5 class="card-title">TinyURL for: <%= URLObject.longURL %></h5>
             <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
             <h5 class="card-title">Edit:</h5>
             <p>
               <form method = "POST" action = "/urls/<%= shortURL %>/update">
-                <input name="longURL" value="<%= longURL %>">
+                <input name="longURL" value="<%= URLObject.longURL %>">
                 <button type="submit">Update</button>
               </form>
             </p>

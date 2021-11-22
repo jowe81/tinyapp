@@ -2,8 +2,8 @@
 const helpers = require("./helpers");
 
 const urls = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "rndmID" },
+  "9sm5xK": { longURL: "http://www.google.com", userID: "rndmID" },
 };
 
 const addURL = (longURL, userID) => {
@@ -12,6 +12,13 @@ const addURL = (longURL, userID) => {
   return shortURL;
 };
 
+const updateURL = (shortURL, longURL) => {
+  urls[shortURL].longURL = longURL;
+}
+
+const getURL = (shortURL) => {
+  return urls[shortURL];
+};
 
 const users = {
   "rndmID": {
@@ -65,6 +72,8 @@ const validateUserCredentials = (email, password) => {
 module.exports = {
   urls,
   addURL,
+  updateURL,
+  getURL,
   users,
   addUser,
   getUserByID,

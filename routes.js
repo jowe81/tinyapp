@@ -93,22 +93,22 @@ const registerRoutes = (app) => {
     res.redirect('/urls');
   });
 
-  //Edit entry
+  //Edit/Update entry
   app.post('/urls/:shortURL/update', (req, res) => {
     const shortURL = req.params.shortURL;
     const longURL = req.body.longURL;
     lg(`Updating ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
-    database.urls[req.params.shortURL] = longURL;
+    database.updateURL(req.params.shortURL, longURL);
     res.redirect('/urls');
   });
 
   //Render info page for URL indicated by :shortURL
   app.get('/urls/:shortURL', (req, res) => {
     const shortURL = req.params.shortURL;
-    const longURL = database.urls[shortURL];
-    if (longURL !== undefined) {
+    const URLObject = database.getURL(shortURL);
+    if (URLObject) {
       lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
-      const templateVars = { shortURL, longURL, user:database.users[req.cookies.user_id] };
+      const templateVars = { shortURL, URLObject, user:database.users[req.cookies.user_id] };
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL - redirect to URL list
@@ -120,10 +120,10 @@ const registerRoutes = (app) => {
 
   //Redirect from :shortURL to its target
   app.get('/u/:shortURL', (req, res) => {
-    const longURL = database.urls[req.params.shortURL];
-    if (longURL !== undefined) {
-      lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${longURL}`);
-      res.redirect(longURL);
+    const URLObject = database.getURL(req.params.shortURL);
+    if (URLObject) {
+      lg(`Redirecting ${req.socket.remoteAddress}:${req.socket.remotePort} to ${URLObject.longURL}`);
+      res.redirect(URLObject.longURL);
     } else {
       //Invalid shortURL - redirect to home page
       lg(`Invalid shortURL from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
