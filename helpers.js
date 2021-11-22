@@ -1,5 +1,7 @@
 //helpers.js: various helper functions
 
+const constants = require("./constants");
+
 const getCharacterRange = (offset, range) => {
   let i;
   let chars = "";
@@ -17,13 +19,22 @@ const generateRandomCharacter = () => {
   return allChars[pos];
 };
 
-const generateRandomString = () => {
-  const length = 6;
+const generateRandomString = (length) => {
+  const l = 6 || length;
   let str = "";
-  for (let i = 0; i < length; i++) {
+  for (let i = 0; i < l; i++) {
     str += generateRandomCharacter();
   }
   return str;
 };
 
-module.exports = { generateRandomString };
+const generateID = () => {
+  return generateRandomString(constants.ID_LENGTH);
+};
+
+const isValidEmail = (email) => {
+  //Make sure it's non-empty. Can improve later.
+  return email.trim().length > 0;
+};
+
+module.exports = { generateID, isValidEmail };
