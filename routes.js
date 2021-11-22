@@ -4,18 +4,6 @@ const constants = require("./constants");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
-const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
-};
-
-const users = {
-  "rndmID": {
-    id: "rndmID",
-    email: "johannes@drweber.de",
-    password: "password"
-  }
-};
 
 const registerRoutes = (app) => {
 
