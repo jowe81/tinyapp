@@ -29,17 +29,11 @@ const registerRoutes = (app) => {
   //Register a new user, redirect to /urls
   app.post('/register', (req, res) => {
     if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
-      //Form data is valid
-      if (!helpers.emailExists(database.usersusers, req.body.email)) {
-        //Email address is available
-        const userID = helpers.generateID();
-        database.users[userID] = {
-          id: userID,
-          email: req.body.email,
-          password: req.body.password,
-        };
-        res.cookie('user_id', userID);
-        lg(`Added user ${JSON.stringify(database.users[userID])}`);
+      //Form data is valid, attempt creation of new user record
+      const newUserID = database.addUser(req.body.email, req.body.password);
+      if (newUserID) {
+        res.cookie('user_id', newUserID);
+        lg(`Added user ${JSON.stringify(database.users[newUserID])}`);
         res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
         //Email exists already
