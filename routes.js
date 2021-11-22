@@ -27,7 +27,7 @@ const registerRoutes = (app) => {
 
   //Process logout
   app.post('/logout', (req, res) => {
-    res.clearCookie("username");
+    res.clearCookie("user_id");
     res.redirect("/urls");
   });
 
@@ -41,7 +41,7 @@ const registerRoutes = (app) => {
   app.post('/register', (req, res) => {
     if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
       //Form data is valid
-      if (!helpers.emailExists(req.body.email)) {
+      if (!helpers.emailExists(users, req.body.email)) {
         //Email address is available
         const userID = helpers.generateID();
         users[userID] = {
@@ -51,7 +51,7 @@ const registerRoutes = (app) => {
         };
         res.cookie('user_id', userID);
         lg(`Added user ${JSON.stringify(users[userID])}`);
-        res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect  
+        res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
         //Email exists already
         res.statusCode = 400;
