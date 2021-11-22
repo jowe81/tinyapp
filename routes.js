@@ -71,8 +71,8 @@ const registerRoutes = (app) => {
     res.render('urls_index', templateVars);
   });
 
-  //Generate and store shortURL, then redirect to URL info page
-  app.post('/urls', (req, res) => {
+  //Generate and store shortURL (must be logged in), then redirect to URL info page
+  app.post('/urls', loginChecker, (req, res) => {
     const shortURL = helpers.generateID();
     const longURL = req.body.longURL;
     lg(`Creating new shortURL (${shortURL}) for ${longURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
