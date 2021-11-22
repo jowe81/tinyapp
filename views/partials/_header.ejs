@@ -11,12 +11,7 @@
             <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
           </div>
         </div>
-        <% if (user === undefined) { %>
-          <form class="form-inline my-2 my-lg-0" method="POST" action="/login">
-            <span class="text-light mx-2">User: <input name="username"></span>
-            <button class="btn btn-outline-light">Login</button>
-          </form>  
-        <% } else { %>
+        <% if (!typeof user === 'undefined') { %>
           <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             <span class="text-light mx-2"><strong><%= user.email %></strong> </span>
             <button class="btn btn-outline-light">Logout</button>
