@@ -32,7 +32,7 @@ const registerRoutes = (app) => {
 
   //Render user registration form
   app.get('/register', (req, res) => {
-    const templateVars = { userID:users[req.cookies.user_id] };
+    const templateVars = { user:users[req.cookies.user_id] };
     res.render('register', templateVars);
   });
 
@@ -44,7 +44,8 @@ const registerRoutes = (app) => {
       email: req.body.email,
       password: req.body.password,
     };
-    lg(`Added user ${JSON.stringify(users[userID])}`)
+    res.cookie('user_id', userID);
+    lg(`Added user ${JSON.stringify(users[userID])}`);
     res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
   });
 
@@ -55,7 +56,7 @@ const registerRoutes = (app) => {
 
   //Render a list of all stored URLs
   app.get(['/urls','/'], (req, res) => {
-    const templateVars = { urls: urlDatabase, userID:users[req.cookies.user_id] };
+    const templateVars = { urls: urlDatabase, user:users[req.cookies.user_id] };
     res.render('urls_index', templateVars);
   });
 
@@ -70,7 +71,7 @@ const registerRoutes = (app) => {
 
   //Render form to create a new shortURL
   app.get('/urls/new', (req, res) => {
-    const templateVars = { userID:users[req.cookies.user_id] };
+    const templateVars = { user:users[req.cookies.user_id] };
     res.render('urls_new', templateVars);
   });
 
@@ -97,7 +98,7 @@ const registerRoutes = (app) => {
     const longURL = urlDatabase[shortURL];
     if (longURL !== undefined) {
       lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
-      const templateVars = { shortURL, longURL, userID:users[req.cookies.user_id] };
+      const templateVars = { shortURL, longURL, user:users[req.cookies.user_id] };
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL - redirect to URL list
