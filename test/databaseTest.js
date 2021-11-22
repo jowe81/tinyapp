@@ -16,4 +16,10 @@ describe("database.urlsForUser", () => {
     assert.notExists(urls[shortURL]);
   });
 
+  it(`does not return URL objects when no user ID specified`, () => {
+    const shortURL = database.addURL("http://test3.co.uk", "otherUserID");
+    const urls = database.urlsForUser();
+    assert.notExists(urls[shortURL]);
+  });
+
 });
