@@ -36,12 +36,12 @@ const getUserByEmail = (email) => {
     }
   }
   return false;
-}
+};
 
 //Return userID if credentials are valid (for Login)
 const validateUserCredentials = (email, password) => {
   const user = getUserByEmail(email);
-  return user && user.password === password;
+  return user && user.password === password ? user.id : false;
 };
 
-module.exports = { urls, users, addUser, validateUserCredentials };
+module.exports = { urls, users, addUser, getUserByEmail, validateUserCredentials };
