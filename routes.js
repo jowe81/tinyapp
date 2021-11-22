@@ -20,6 +20,8 @@ const registerRoutes = (app) => {
       res.cookie("user_id", loggedInUserID);
     } else {
       lg(`Login attempt for ${req.body.email} failed`, "UI");
+      res.statusCode = 403;
+      return res.end(`Invalid or Missing Credentials`);
     }
     res.redirect('/urls');
   });
