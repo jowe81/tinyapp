@@ -28,13 +28,24 @@ const generateRandomString = (length) => {
   return str;
 };
 
+//Generate random ID with length as specified in ./constants
 const generateID = () => {
   return generateRandomString(constants.ID_LENGTH);
 };
 
+//Basic email string validity check
 const isValidEmail = (email) => {
-  //Make sure it's non-empty. Can improve later.
   return email.trim().length > 0;
 };
 
-module.exports = { generateID, isValidEmail };
+//Return true if user with email email exists in users
+const emailExists = (users, email) => {
+  for (const user in users) {
+    if (user.email && user.email === email) {
+      return true;
+    }
+  }
+  return false;
+};
+
+module.exports = { generateID, isValidEmail, emailExists };
