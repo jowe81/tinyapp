@@ -4,7 +4,7 @@ const constants = require("./constants");
 const database = require("./database");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
-
+const loginChecker = require("./loginChecker");
 
 const registerRoutes = (app) => {
 
@@ -80,8 +80,8 @@ const registerRoutes = (app) => {
     res.redirect(`/urls/${shortURL}`);
   });
 
-  //Render form to create a new shortURL
-  app.get('/urls/new', (req, res) => {
+  //Render form to create a new shortURL (must be logged in)
+  app.get('/urls/new', loginChecker, (req, res) => {
     const templateVars = { user:database.users[req.cookies.user_id] };
     res.render('urls_new', templateVars);
   });
