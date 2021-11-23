@@ -15,6 +15,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
 const flash = require("./middleware/flash");
 app.use(flash());
+const loginChecker = require("./middleware/loginChecker");
+app.use(loginChecker());
 
 //Use EJS templating engine
 app.set('view engine','ejs');
