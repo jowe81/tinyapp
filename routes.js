@@ -18,6 +18,17 @@ const redirectIfUnauthorized = (req, res, next) => {
 const registerRoutes = (app) => {
 
   app.get('/login', (req, res) => {
+    req.flashClear();
+    const previousRequestURL = req.session.getPreviousRequest();
+    if (previousRequestURL === "/logout") {
+      //User (session) just logged out
+      req.flash("You logged out successfully. Goodbye!");
+    } else if (previousRequestURL) {
+      //User (session) had previously logged in
+      req.flash("Welcome back! Login to view and store your URLs.");
+    } else {
+      //New session - visiting login for the first time
+    }
     const templateVars = { flash: req.flash() };
     res.render('login', templateVars);
   });
@@ -40,8 +51,8 @@ const registerRoutes = (app) => {
 
   //Process logout, redirect to /login
   app.post('/logout', (req, res) => {
-    req.flashClear();
-    req.flash('Please log in again if you wish to view or store your URLs!');
+    // req.flashClear();
+    // req.flash('You have logged out. Please log in again if you wish to view or store your URLs!');
     res.clearCookie("user_id");
     res.redirect("/login");
   });
