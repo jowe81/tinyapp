@@ -90,6 +90,10 @@ const validateUserCredentials = (email, password) => {
   return user && bcrypt.compareSync(password, user.password) ? user.id : false;
 };
 
+//True if record with userID exists
+const validateUserID = (userID) => {
+  return typeof users[userID] === 'object';
+};
 
 module.exports = {
   urls,
@@ -102,5 +106,6 @@ module.exports = {
   addUser,
   getUserByID,
   getUserByEmail,
-  validateUserCredentials
+  validateUserCredentials,
+  validateUserID,
 };
