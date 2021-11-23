@@ -16,8 +16,13 @@ const sessions = (req, res, next) => {
     const sessionID = helpers.generateID();
     _sessions[sessionID] = {
       logins: [],
+      requests: [],
     };
     return sessionID;
+  };
+
+  const _getNoRequests = (sessionID) => {
+    return _sessions[sessionID].requests.length;
   };
 
   return (req, res, next) => {
@@ -35,6 +40,21 @@ const sessions = (req, res, next) => {
           lg(`[${req.sessionID}]: Login`, logPrefix);
         },
 
+        //Log this request
+        registerRequest: () => {
+          _sessions[req.sessionID].requests.push(req.url);
+          lg(`[${req.sessionID}]: Request to ${req.url}`, logPrefix);
+        },
+        
+        //Return entire requests array
+        getRequestsArray: () => _sessions[req.sessionID].requests,
+
+        //Return URL of previous request
+        getPreviousRequest: () => {
+          //Previous request is the one less than the highest index (which would be the current request)
+          return _sessions[req.sessionID].requests[_getNoRequests(req.sessionID) - 2];
+        },
+
       };
     }
 
@@ -48,6 +68,8 @@ const sessions = (req, res, next) => {
 
     //Ensure req.sessionID is defined (already so if this is a new session; otherwise assign cookie value)
     req.sessionID = req.sessionID || req.cookies.session_id;
+
+    req.session.registerRequest();
     next();
 
   };
