@@ -13,6 +13,8 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
+const sessions = require("./middleware/sessions");
+app.use(sessions());
 const flash = require("./middleware/flash");
 app.use(flash());
 const loginChecker = require("./middleware/loginChecker");
