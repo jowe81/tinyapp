@@ -13,6 +13,8 @@ const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
+const flash = require("./middleware/flash");
+app.use(flash());
 
 //Use EJS templating engine
 app.set('view engine','ejs');

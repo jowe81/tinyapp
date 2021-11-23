@@ -22,3 +22,7 @@
         <% } %>
       </nav>
     </header>
+    
+    <% if (typeof flash === 'object') { %>
+      <b>Message: <%= flash[0] %></b>
+    <% } %>

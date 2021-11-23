@@ -6,6 +6,7 @@ const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 const loginChecker = require("./loginChecker");
 
+
 const registerRoutes = (app) => {
 
   app.get('/login', (req, res) => {
@@ -68,8 +69,12 @@ const registerRoutes = (app) => {
   //Render a list of all stored URLs for currently logged-in user
   app.get(['/urls','/'], (req, res) => {
     const urlsForUser = database.urlsForUser(req.cookies.user_id);
-    lg(`Rendering list with ${Object.keys(urlsForUser).length} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
-    const templateVars = { urls: urlsForUser, user:database.users[req.cookies.user_id] };
+    const noUrls = Object.keys(urlsForUser).length;
+    lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
+    const templateVars = { urls: urlsForUser, user:database.users[req.cookies.user_id], flash: req.flash() };
+    if (!req.cookies.user_id) {
+      req.flash('You need to log in to view and store URLs. Please register or login.');
+    }
     res.render('urls_index', templateVars);
   });
 
