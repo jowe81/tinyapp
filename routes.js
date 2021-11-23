@@ -8,6 +8,7 @@ const { lg } = require("@jowe81/lg");
 const redirectIfUnauthorized = (req, res, next) => {
   //Routing-middleware: redirect to /login if not authorized
   if (!database.getUserByID(req.cookies.user_id)) {
+    req.flash('Please register and login to view and store your URLs!');
     return res.redirect("/login");
   }
   next();
@@ -17,7 +18,8 @@ const redirectIfUnauthorized = (req, res, next) => {
 const registerRoutes = (app) => {
 
   app.get('/login', (req, res) => {
-    res.render('login');
+    const templateVars = { flash: req.flash() };
+    res.render('login', templateVars);
   });
 
   //Process login, redirect to /urls
@@ -26,6 +28,8 @@ const registerRoutes = (app) => {
     if (loggedInUserID) {
       lg(`User ${loggedInUserID} (${req.body.email}) logged in`);
       res.cookie("user_id", loggedInUserID);
+      req.session.registerLogin();
+      req.flashClear(); //Get rid of any pre-login messages
     } else {
       lg(`Login attempt for ${req.body.email} failed`, "UI");
       res.statusCode = 403;
@@ -34,10 +38,12 @@ const registerRoutes = (app) => {
     res.redirect('/urls');
   });
 
-  //Process logout, redirect to /urls
+  //Process logout, redirect to /login
   app.post('/logout', (req, res) => {
+    req.flashClear();
+    req.flash('Please log in again if you wish to view or store your URLs!');
     res.clearCookie("user_id");
-    res.redirect("/urls");
+    res.redirect("/login");
   });
 
   //Render user registration form
@@ -82,7 +88,7 @@ const registerRoutes = (app) => {
   });
 
   //Render a list of all stored URLs for currently logged-in user, or suggest to register/login
-  app.get(['/urls','/'], (req, res) => {
+  app.get(['/urls','/'], redirectIfUnauthorized, (req, res) => {
     const urlsForUser = database.urlsForUser(req.userID());
     const noUrls = Object.keys(urlsForUser).length;
     const templateVars = { urls: urlsForUser, user:database.users[req.cookies.user_id], flash: req.flash() };
