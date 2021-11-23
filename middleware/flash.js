@@ -9,6 +9,7 @@ const flash = (req, res, next) => {
   //Store flash messages in this closure - use sessionID as key
   const _messages = {};
 
+  //Initialize messages for this session if needed
   const _ensureInit = (sessionID) => {
     if (!Array.isArray(_messages[sessionID])) {
       _messages[sessionID] = [];
