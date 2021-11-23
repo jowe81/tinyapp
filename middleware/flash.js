@@ -16,8 +16,8 @@ const flash = (req, res, next) => {
     }
 
     //Init the middleware.
-    //Pass a message to add it. Omit the argument to retrieve the messages array
     if (!req.flash) {
+      //Pass a message to add it. Omit the argument to retrieve the messages array
       req.flash = (message) => {
         if (message) {
           _messages.push(message);
@@ -27,7 +27,7 @@ const flash = (req, res, next) => {
       };
       return next();
     }
-    
+
   };
 };
 
