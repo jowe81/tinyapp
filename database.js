@@ -1,5 +1,7 @@
 //database.js: exports the users and urls objects
 const helpers = require("./helpers");
+const bcrypt = require("bcrypt");
+const constants = require("./constants");
 
 const urls = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "rndmID" },
@@ -44,7 +46,7 @@ const users = {
   "rndmID": {
     id: "rndmID",
     email: "johannes@drweber.de",
-    password: "password"
+    password: "$2b$10$3mrgiWOPKITE57VbmLuJzOgSImSMXLupwtTkIINqDNgP5xNY.Nh8i" //"password"
   }
 };
 
@@ -55,7 +57,7 @@ const addUser = (email, password) => {
     users[userID] = {
       id: userID,
       email: email,
-      password: password,
+      password: bcrypt.hashSync(password, constants.SALT_ROUNDS),
     };
     return userID;
   }
@@ -85,7 +87,7 @@ const getUserByEmail = (email) => {
 //Return userID if credentials are valid (for Login)
 const validateUserCredentials = (email, password) => {
   const user = getUserByEmail(email);
-  return user && user.password === password ? user.id : false;
+  return user && bcrypt.compareSync(password, user.password) ? user.id : false;
 };
 
 

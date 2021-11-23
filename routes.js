@@ -67,8 +67,9 @@ const registerRoutes = (app) => {
 
   //Render a list of all stored URLs for currently logged-in user
   app.get(['/urls','/'], (req, res) => {
-    console.log(database.urlsForUser(req.cookies.user_id));
-    const templateVars = { urls: database.urlsForUser(req.cookies.user_id), user:database.users[req.cookies.user_id] };
+    const urlsForUser = database.urlsForUser(req.cookies.user_id);
+    lg(`Rendering list with ${Object.keys(urlsForUser).length} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
+    const templateVars = { urls: urlsForUser, user:database.users[req.cookies.user_id] };
     res.render('urls_index', templateVars);
   });
 

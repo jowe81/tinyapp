@@ -7,6 +7,9 @@ const constants = {
 
   //Length for auto-generated random IDs
   ID_LENGTH: 6,
+
+  //Salt rounds for hashing
+  SALT_ROUNDS: 10,
 };
 
 module.exports = constants;
