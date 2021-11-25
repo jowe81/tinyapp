@@ -18,7 +18,6 @@ const redirectIfUnauthorized = (req, res, next) => {
 const registerRoutes = (app) => {
 
   app.get('/login', (req, res) => {
-    req.flashClear();
     const previousRequestURL = req.session.getPreviousRequest().path;
     let msg;
     if (previousRequestURL === "/logout") {
@@ -43,7 +42,6 @@ const registerRoutes = (app) => {
       lg(`User ${loggedInUserID} (${req.body.email}) logged in`);
       res.cookie("user_id", loggedInUserID);
       req.session.registerLogin();
-      req.flashClear(); //Get rid of any pre-login messages
     } else {
       lg(`Login attempt for ${req.body.email} failed`, "UI");
       res.statusCode = 403;
@@ -54,8 +52,6 @@ const registerRoutes = (app) => {
 
   //Process logout, redirect to /login
   app.post('/logout', (req, res) => {
-    // req.flashClear();
-    // req.flash('You have logged out. Please log in again if you wish to view or store your URLs!');
     res.clearCookie("user_id");
     res.redirect("/login");
   });
