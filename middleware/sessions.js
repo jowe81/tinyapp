@@ -54,7 +54,8 @@ const sessions = (req, res, next) => {
         //Return URL of previous request
         getPreviousRequest: () => {
           //Previous request is the one less than the highest index (which would be the current request)
-          return _sessions[req.sessionID].requests[_getNoRequests(req.sessionID) - 2];
+          //- If there's no previous request, return current request
+          return _sessions[req.sessionID].requests[_getNoRequests(req.sessionID) - 2] || _sessions[req.sessionID].requests[0];
         },
 
       };
