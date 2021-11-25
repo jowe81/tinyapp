@@ -48,4 +48,29 @@ const emailExists = (users, email) => {
   return false;
 };
 
-module.exports = { generateID, isValidEmail, emailExists };
+//Returns the string if there's a valid URL at the beginning of the url string; false if not
+//Rudimentary tests only (with Regex crafted from scratch)
+const verifyURL = (url) => {
+  const trimmedURL = url.trim();
+  // Requires:
+  // - protocol with 3 or 4 characters followed by ://
+  // - one or more iterations of xxxx. (also allowing digits and hyphens; in any order for sake of simplicity)
+  // - a TLD (two or more letters)
+  // - zero or more path components, consisting of a slash followed by letters or digits (also allowing -, _, .)
+  // - if protocol is missing or invalid, it will return http:// as the protocol
+  // Does not check a potentially present querystring
+  const rgx = new RegExp(/(?<protocol>^[a-z]{3,4}:\/\/)?([\w-]+\.)+[a-z]{2,}(\/[\w-_.]+)*/i);
+  const match = rgx.exec(trimmedURL);
+  if (match) {
+    const protocol = match.groups.protocol;
+    //If protocol was present, return match as is, or else send http:// followed by the input starting from the match
+    return protocol ? match['input'] : "http://" + match['input'].substr(match['input'].indexOf(match[0]));
+  }
+  return false;
+};
+
+module.exports = {
+  generateID,
+  isValidEmail,
+  emailExists,
+  verifyURL };
