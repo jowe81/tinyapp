@@ -121,15 +121,22 @@ const registerRoutes = (app) => {
 
   //Generate and store shortURL (must be logged in), then redirect to URL info page
   app.post('/urls', redirectIfUnauthorized, (req, res) => {
-    const longURL = helpers.verifyURL(req.body.longURL);
-    if (longURL) {
-      const shortURL = database.addURL(longURL, req.cookies.user_id);
-      lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
-      res.redirect(`/urls/${shortURL}`);
+    req.flashClear(); //In case there was a message from a previous failed attempt
+    if (req.body.longURL) {
+      const longURL = helpers.verifyURL(req.body.longURL);
+      if (longURL) {
+        const shortURL = database.addURL(longURL, req.cookies.user_id);
+        lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
+        res.redirect(`/urls/${shortURL}`);
+      } else {
+        //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
+        req.flash(`You entered an invalid URL. Please try again.`);
+        res.redirect(`/urls/new?longURL=${req.body.longURL}`);
+      }
     } else {
-      //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
-      req.flash(`You entered an invalid URL. Please try again.`);
-      res.redirect(`/urls/new?longURL=${req.body.longURL}`);
+      //User didn't enter anything      
+      req.flash(`Looks like you did not enter anything - please enter a valid URL to shorten.`);
+      res.redirect('/urls/new');
     }
   });
 
