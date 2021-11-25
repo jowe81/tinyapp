@@ -126,12 +126,12 @@ const registerRoutes = (app) => {
         res.redirect(`/urls/${shortURL}`);
       } else {
         //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
-        req.flash(`You entered an invalid URL. Please try again.`, 'alert-warning');
+        req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL, 'alert-warning');
         res.redirect(`/urls/new?longURL=${req.body.longURL}`);
       }
     } else {
-      //User didn't enter anything      
-      req.flash(`Looks like you did not enter anything - please enter a valid URL to shorten.`, 'alert-warning');
+      //User didn't enter anything
+      req.flash(constants.FLASH_MESSAGES.NEW_URL.NOTHING_ENTERED, 'alert-warning');
       res.redirect('/urls/new');
     }
   });
