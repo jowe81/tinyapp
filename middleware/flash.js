@@ -36,12 +36,12 @@ const flash = (req, res, next) => {
         }
       };
 
-      //Pass a message to add it. Omit the argument to retrieve the messages array
-      req.flash = (message) => {
+      //Pass a message to add it. Omit the arguments to retrieve the messages array
+      req.flash = (message, type = 'alert-primary') => {
         _ensureInit(req.sessionID);
         if (message) {
           //Add message to this sessions' messages array
-          _messages[req.sessionID].push(message);
+          _messages[req.sessionID].push({ message, type });
         } else {
           //Return messages for this sesion
           return _messages[req.sessionID];
