@@ -24,5 +24,5 @@
     </header>
     
     <% if (typeof flash === 'object' && flash.length > 0) { %>
-      <div class='alert alert-primary'><%= flash[0] %></div>
+      <div class='alert <%= flash[0].type %>'><%= flash[0].message %></div>
     <% } %>
