@@ -23,6 +23,6 @@
       </nav>
     </header>
     
-    <% if (typeof flash === 'object') { %>
-      <b>Message: <%= flash[0] %></b>
+    <% if (typeof flash === 'object' && flash.length > 0) { %>
+      <div class='alert alert-primary'><%= flash[0] %></div>
     <% } %>
