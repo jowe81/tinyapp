@@ -20,15 +20,18 @@ const registerRoutes = (app) => {
   app.get('/login', (req, res) => {
     req.flashClear();
     const previousRequestURL = req.session.getPreviousRequest();
+    let msg;
     if (previousRequestURL === "/logout") {
       //User (session) just logged out
-      req.flash("You logged out successfully. Goodbye!");
-    } else if (previousRequestURL) {
+      msg =  constants.FLASH_MESSAGES.LOGIN.GOODBYE;
+    } else if (previousRequestURL && req.session.hasLoggedInBefore()) {
       //User (session) had previously logged in
-      req.flash("Welcome back! Login to view and store your URLs.");
+      msg = constants.FLASH_MESSAGES.LOGIN.WELCOME_BACK;
     } else {
       //New session - visiting login for the first time
+      msg = constants.FLASH_MESSAGES.LOGIN.WELCOME;
     }
+    req.flash(msg);
     const templateVars = { flash: req.flash() };
     res.render('login', templateVars);
   });
@@ -65,7 +68,7 @@ const registerRoutes = (app) => {
 
   //Register a new user, redirect to /urls
   app.post('/register', (req, res) => {
-    if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length > constants.MIN_PASSWORD_LENGTH) {
+    if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length >= constants.MIN_PASSWORD_LENGTH) {
       //Form data is valid, attempt creation of new user record
       const newUserID = database.addUser(req.body.email, req.body.password);
       if (newUserID) {
