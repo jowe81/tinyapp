@@ -3,6 +3,10 @@ const helpers = require("./helpers");
 const bcrypt = require("bcrypt");
 const constants = require("./constants");
 
+
+//************** URLS data and methods ******************
+
+//This is where we hold URLs; prepopulate with defaults below
 const urls = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "rndmID" },
   "9sm5xK": { longURL: "http://www.google.com", userID: "rndmID" },
@@ -23,7 +27,7 @@ const getURL = (shortURL, userID) => {
   return !userID || urls[shortURL].userID === userID ? urls[shortURL] : false;
 };
 
-//Return urls owned by user userID, or all urls not specified
+//Return urls owned by user userID, or all urls if not specified
 const getURLs = (userID) => {
   const output = {};
   for (const shortURL in urls) {
@@ -40,13 +44,14 @@ const urlsForUser = (userID) => userID ? getURLs(userID) : {};
 
 
 
+//************** USERS data and methods ******************
 
-
+//This is where we hold users; prepopulate with defaults below
 const users = {
   "rndmID": {
     id: "rndmID",
     email: "johannes@drweber.de",
-    password: "$2b$10$3mrgiWOPKITE57VbmLuJzOgSImSMXLupwtTkIINqDNgP5xNY.Nh8i" //"password"
+    password: "$2b$10$3mrgiWOPKITE57VbmLuJzOgSImSMXLupwtTkIINqDNgP5xNY.Nh8i" // ->"password"
   }
 };
 
@@ -94,6 +99,9 @@ const validateUserCredentials = (email, password) => {
 const validateUserID = (userID) => {
   return typeof users[userID] === 'object';
 };
+
+
+
 
 module.exports = {
   urls,
