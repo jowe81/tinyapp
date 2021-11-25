@@ -18,11 +18,6 @@ const flash = (req, res, next) => {
 
   return (req, res, next) => {
 
-    //If middleware is already initialized, nothing to do
-    if (req.flash) {
-      return next();
-    }
-
     //Init the middleware.
     if (!req.flash) {
 
@@ -48,8 +43,14 @@ const flash = (req, res, next) => {
         }
       };
 
-      return next();
     }
+
+    //Delete old messages if previous request was a GET request
+    if (req.session.getPreviousRequest().method === "GET") {
+      req.flashClear();
+    }
+
+    return next();
 
   };
 };
