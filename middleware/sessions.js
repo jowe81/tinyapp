@@ -40,6 +40,8 @@ const sessions = (req, res, next) => {
           lg(`[${req.sessionID}]: Login`, logPrefix);
         },
 
+        hasLoggedInBefore: () => _sessions[req.sessionID].logins.length > 0,
+
         //Log this request
         registerRequest: () => {
           _sessions[req.sessionID].requests.push(req.url);
