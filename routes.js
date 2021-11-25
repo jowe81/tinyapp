@@ -121,15 +121,20 @@ const registerRoutes = (app) => {
 
   //Generate and store shortURL (must be logged in), then redirect to URL info page
   app.post('/urls', redirectIfUnauthorized, (req, res) => {
-    const longURL = req.body.longURL;
-    const shortURL = database.addURL(longURL, req.cookies.user_id);
-    lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
-    res.redirect(`/urls/${shortURL}`);
+    const longURL = helpers.verifyURL(req.body.longURL);
+    if (longURL) {
+      const shortURL = database.addURL(longURL, req.cookies.user_id);
+      lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
+      res.redirect(`/urls/${shortURL}`);
+    } else {
+      req.flash(`You entered an invalid URL. Please try again.`);
+      res.redirect(`/urls/new?longURL=${longURL}`);
+    }
   });
 
   //Render form to create a new shortURL (must be logged in)
   app.get('/urls/new', redirectIfUnauthorized, (req, res) => {
-    const templateVars = { user:database.users[req.cookies.user_id] };
+    const templateVars = { user:database.users[req.cookies.user_id], flash: req.flash() };
     res.render('urls_new', templateVars);
   });
 
