@@ -19,7 +19,7 @@ const registerRoutes = (app) => {
 
   app.get('/login', (req, res) => {
     req.flashClear();
-    const previousRequestURL = req.session.getPreviousRequest();
+    const previousRequestURL = req.session.getPreviousRequest().path;
     let msg;
     if (previousRequestURL === "/logout") {
       //User (session) just logged out

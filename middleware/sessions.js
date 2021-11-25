@@ -44,8 +44,8 @@ const sessions = (req, res, next) => {
 
         //Log this request
         registerRequest: () => {
-          _sessions[req.sessionID].requests.push(req.url);
-          lg(`[${req.sessionID}]: Request to ${req.url}`, logPrefix);
+          _sessions[req.sessionID].requests.push({ path: req.url, method: req.method });
+          lg(`[${req.sessionID}]: ${req.method} request to ${req.url}`, logPrefix);
         },
         
         //Return entire requests array
