@@ -127,8 +127,9 @@ const registerRoutes = (app) => {
       lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
       res.redirect(`/urls/${shortURL}`);
     } else {
+      //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
       req.flash(`You entered an invalid URL. Please try again.`);
-      res.redirect(`/urls/new?longURL=${longURL}`);
+      res.redirect(`/urls/new?longURL=${req.body.longURL}`);
     }
   });
 

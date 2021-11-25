@@ -11,11 +11,27 @@
       <form class="form-inline" action="/urls" method="POST">
         <div class="form-group mb-2">
           <label for="longURL">Enter a URL:</label>
-          <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
+          <input class="form-control" type="text" id="longURL" name="longURL" placeholder="http://" style="width: 300px; margin: 1em">
           <button type="submit" class="btn btn-primary">Submit</button>
         </div>
       </form>
     </main>
     <%- include('partials/_scripts') %>
+    <script>
+      //Get longURL parameter if present (after failed attempt)
+      // (is there an easier way than looking at all the parameters??)
+      const urlParams = new URLSearchParams(location.search);
+      let longURL = undefined;
+      for (const [key, value] of urlParams){
+        if (key === "longURL") {
+          longURL = value;
+          break;
+        }
+      }
+      //Prepopulate the input with previous attempt
+      if (longURL) {
+        $("#longURL").val(longURL);
+      }
+    </script>
   </body>
 </html>
