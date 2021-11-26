@@ -27,6 +27,35 @@ const getURL = (shortURL, userID) => {
   return !userID || urls[shortURL].userID === userID ? urls[shortURL] : false;
 };
 
+const sortURLs = (urls) => {
+  const sortedUrls = {};
+  //Put all url objects into an array
+  const array = [];
+  for (const url in urls) {
+    const thisUrl = {};
+    thisUrl[url] = urls[url];
+    array.push(thisUrl);
+  }
+  //Order by longURL
+  array.sort((a, b) => {
+    const keyA = Object.keys(a)[0];
+    const keyB = Object.keys(b)[0];
+    console.log("keyA/b",keyA,keyB);
+    console.log("keyA/b longurl",a[keyA].longURL,b[keyB].longURL);
+    console.log("B is greater:", a[keyA].longURL < b[keyB].longURL);
+    return a[keyA].longURL > b[keyB].longURL ? 1 : -1;
+  });
+  //Reconstruct original object in order
+  for (const url of array) {
+    sortedUrls[Object.keys(url)[0]] = url[Object.keys(url)[0]];
+  }
+  console.log("Input:",urls);
+  console.log("Array:", array);
+  console.log("Sorted:", sortedUrls);
+
+  return sortedUrls;
+};
+
 //Return urls owned by user userID, or all urls if not specified
 const getURLs = (userID) => {
   const output = {};
@@ -35,7 +64,7 @@ const getURLs = (userID) => {
       output[shortURL] = urls[shortURL];
     }
   }
-  return output;
+  return sortURLs(output);
 };
 
 //Return urls owned by user
