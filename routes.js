@@ -5,8 +5,8 @@ const database = require("./database");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
+//Routing-middleware: redirect to /login if not authorized
 const redirectIfUnauthorized = (req, res, next) => {
-  //Routing-middleware: redirect to /login if not authorized
   if (!database.getUserByID(req.session.getUserID())) {
     return res.redirect("/login");
   }
