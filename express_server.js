@@ -1,6 +1,7 @@
 //express_server.js: TinyApp entry point
 
 const constants = require("./constants");
+const args = require("./args");
 const { registerRoutes } = require("./routes");
 
 //Setup logging
@@ -28,7 +29,10 @@ app.set('view engine','ejs');
 //Register all route definitions in routes.js
 registerRoutes(app);
 
-app.listen(constants.PORT, () => {
-  lg(`Server listening on port ${constants.PORT}`, "App");
+//Get port from command line or fall back to constants.js
+const port = args.port > 0 ? args.port : constants.PORT;
+
+app.listen(port, () => {
+  lg(`Server listening on port ${port}`, "App");
 });
 
