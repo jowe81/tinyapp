@@ -18,19 +18,14 @@
     </main>
     <%- include('partials/_scripts') %>
     <script>
-      //Get longURL parameter if present (after failed attempt)
-      // (is there an easier way than looking at all the parameters??)
-      const urlParams = new URLSearchParams(location.search);
-      let longURL = undefined;
-      for (const [key, value] of urlParams){
-        if (key === "longURL") {
-          longURL = value;
-          break;
-        }
-      }
-      //Prepopulate the input with previous attempt
+      let longURL = urlParam('longURL');
       if (longURL) {
+        //Prepopulate the input with previous attempt
         $("#longURL").val(longURL);
+        cursorToEndOfInput("#longURL");
+      } else {
+        //Pre-focus the input field
+        $("#longURL").focus();
       }
     </script>
   </body>
