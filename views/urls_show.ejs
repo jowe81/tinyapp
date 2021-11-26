@@ -12,12 +12,12 @@
           <h5 class="card-title">TinyURL for: <%= URLObject.longURL %></h5>
           <p class="card-text">Short URL (click&nbsp;to&nbsp;visit): <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
           <h5 class="card-title">Edit:</h5>
-          <p>
-            <form method = "POST" action = "/urls/<%= shortURL %>/update">
-              <input name="longURL" id="longURL" value="<%= URLObject.longURL %>">
-              <button type="submit">Update</button>
+          <div class="d-flex justify-content-center">
+            <form class="form-inline" method="POST" action = "/urls/<%= shortURL %>/update">
+              <input class="form-control m-2" style="width:300px" name="longURL" id="longURL" value="<%= URLObject.longURL %>">
+              <button class="form-control m-2 button btn-primary" type="submit">Update</button>
             </form>
-          </p>
+          </div>
         </div>
       </div>
     </main>
