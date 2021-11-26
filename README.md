@@ -40,7 +40,7 @@ npm run tinyapp
 ```
 With optional command line argument:
 ```bash
-npm run tinyapp -- [port]
+npm run tinyapp -- [-port port]
 ```
 Terminate the server with `CTRL + C`.
 
