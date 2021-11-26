@@ -30,12 +30,19 @@ const constants = {
     NEW_URL: {
       NOTHING_ENTERED: "Looks like you did not enter anything - please enter a valid URL to shorten.",
       BAD_URL: "You entered an invalid URL. Please try again.",
+      SUCCESS: "Generated new TinyURL for",
     },
 
     //Messages related to the index page (list of URLs)
     URL_INDEX: {
-      NO_RECORDS: `Looks empty here. Why don't you <a href="/urls/new">add a new URL</a>?`,
+      NO_RECORDS: `Looks a bit empty here. Why don't you <a href="/urls/new">add a new URL</a>?`,
     },
+
+    //Messages related to user registration
+    REGISTER: {
+      WELCOME_BEFORE: "To register a TinyApp account, please enter your email address and a password (8 characters or longer)",
+      WELCOME_AFTER: "Registration successful - Welcome to TinyApp!",
+    }
     
   }
 };
