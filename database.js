@@ -58,7 +58,7 @@ const users = {
 //Add new user and return ID or return false if email exists.
 const addUser = (email, password) => {
   if (!helpers.emailExists(users, email)) {
-    const userID = helpers.generateID();
+    const userID = helpers.generateUserID();
     users[userID] = {
       id: userID,
       email: email,

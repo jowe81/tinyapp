@@ -5,8 +5,11 @@ const constants = {
   //Minimum password length required for user registration
   MIN_PASSWORD_LENGTH: 6,
 
-  //Length for auto-generated random IDs
-  ID_LENGTH: 6,
+  //Length for auto-generated random user IDs
+  USERID_LENGTH: 6,
+
+  //Length for auto-generated random session IDs
+  SESSIONID_LENGTH: 64,
 
   //Salt rounds for hashing
   SALT_ROUNDS: 10,

@@ -13,7 +13,7 @@ const sessions = (req, res, next) => {
   const _sessions = {};
 
   const _initSessionObject = () => {
-    const sessionID = helpers.generateID();
+    const sessionID = helpers.generateSessionID();
     _sessions[sessionID] = {
       logins: [],
       requests: [],
