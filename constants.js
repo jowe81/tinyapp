@@ -28,9 +28,18 @@ const constants = {
 
     //Messages related to creating new short-URLs
     NEW_URL: {
-      NOTHING_ENTERED: "Looks like you did not enter anything - please enter a valid URL to shorten.",
-      BAD_URL: "You entered an invalid URL. Please try again.",
-      SUCCESS: "Generated new TinyURL for",
+      NOTHING_ENTERED: {
+        message: "Looks like you did not enter anything - please enter a valid URL to shorten.",
+        type: "alert-warning"
+      },
+      BAD_URL: {
+        message: "You entered an invalid URL. Please try again.",
+        type: "alert-warning",
+      },
+      SUCCESS: {
+        message: "TinyURL created successfully.",
+        type: "alert-success"
+      }
     },
 
     //Messages related to the index page (list of URLs)
@@ -41,7 +50,10 @@ const constants = {
     //Messages related to user registration
     REGISTER: {
       WELCOME_BEFORE: "To register a TinyApp account, please enter your email address and a password (8 characters or longer)",
-      WELCOME_AFTER: "Registration successful - Welcome to TinyApp!",
+      WELCOME_AFTER: {
+        message: "Registration successful - Welcome to TinyApp!",
+        type: "alert-success",
+      }
     }
     
   }

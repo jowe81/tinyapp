@@ -31,14 +31,15 @@ const flash = (req, res, next) => {
         }
       };
 
-      //Pass a message to add it. Omit the arguments to retrieve the messages array
+      //Pass a message (string) or message object {message, type} to add it.
+      //Omit the arguments to retrieve the array of message objects
       req.flash = (message, type = 'alert-primary') => {
         _ensureInit(req.sessionID);
         if (message) {
-          //Add message to this sessions' messages array
-          _messages[req.sessionID].push({ message, type });
+          //Construct object in case message was passed as a string
+          const msgObj = ((message, type) => typeof message === 'object' ? message : { message, type })(message, type);
+          _messages[req.sessionID].push(msgObj);
         } else {
-          //Return messages for this sesion
           return _messages[req.sessionID];
         }
       };

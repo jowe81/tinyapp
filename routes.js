@@ -62,7 +62,7 @@ const registerRoutes = (app) => {
       const newUserID = database.addUser(req.body.email, req.body.password);
       if (newUserID) {
         lg(`Added user ${JSON.stringify(database.users[newUserID])}`);
-        req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_AFTER, "alert-success");
+        req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_AFTER);
         req.session.registerLogin(newUserID);
         res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
@@ -120,16 +120,16 @@ const registerRoutes = (app) => {
       if (longURL) {
         const shortURL = database.addURL(longURL, req.session.getUserID());
         lg(`User ${database.getUserByID(req.session.getUserID()).email} created shortURL ${shortURL} for ${longURL}`);
-        req.flash(`constants.FLASH_MESSAGES.NEW_URL.SUCCESS ${longURL}.`);
+        req.flash(constants.FLASH_MESSAGES.NEW_URL.SUCCESS);
         res.redirect(`/urls/${shortURL}`);
       } else {
         //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
-        req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL, 'alert-warning');
+        req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL);
         res.redirect(`/urls/new?longURL=${req.body.longURL}`);
       }
     } else {
       //User didn't enter anything
-      req.flash(constants.FLASH_MESSAGES.NEW_URL.NOTHING_ENTERED, 'alert-warning');
+      req.flash(constants.FLASH_MESSAGES.NEW_URL.NOTHING_ENTERED);
       res.redirect('/urls/new');
     }
   });
