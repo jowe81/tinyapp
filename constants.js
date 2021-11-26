@@ -23,7 +23,7 @@ const constants = {
     LOGIN: {
       WELCOME: "Welcome! TinyApp lets you shorten and store URLs. Register or login to begin.",
       WELCOME_BACK: "Welcome back! Login to view and store your URLs.",
-      BAD_CREDENTIALS: { 
+      BAD_CREDENTIALS: {
         message: "Invalid or missing credentials. Please try again.",
         type: "alert-warning",
       },
