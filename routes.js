@@ -151,11 +151,13 @@ const registerRoutes = (app) => {
   app.post('/urls/:shortURL/update', redirectIfUnauthorized, (req, res) => {
     const longURL = helpers.verifyURL(req.body.longURL);
     if (longURL) {
+      //Success - updated URL verified
       database.updateURL(req.params.shortURL, longURL);
       res.redirect('/urls');
     } else {
+      //New URL is invalid - redirect user to try again
       req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL);
-      res.redirect(`/urls/${req.params.shortURL}`);
+      res.redirect(`/urls/${req.params.shortURL}?edit=true`);
     }
   });
 
