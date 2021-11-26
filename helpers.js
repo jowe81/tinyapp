@@ -31,8 +31,8 @@ const generateRandomString = (length = 6) => {
 };
 
 //Generate random ID with length
-const generateID = (length = 6) => {
-  return generateRandomString(length);
+const generateID = (length) => {
+  return generateRandomString(length || constants.ID_LENGTH);
 };
 
 const generateUserID = () => {
@@ -89,6 +89,7 @@ const verifyURL = (url) => {
 };
 
 module.exports = {
+  generateID,
   generateUserID,
   generateSessionID,
   isValidEmail,
