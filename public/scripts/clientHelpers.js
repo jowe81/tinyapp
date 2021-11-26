@@ -1,20 +1,30 @@
-//clientHelpers.js: call at the end of the footer partial
+//clientHelpers.js: class with client-side helper functions
 
-//Return URL parameter param or false
-const urlParam = (param) => {
-  const urlParams = new URLSearchParams(location.search);
-  for (const [key, value] of urlParams) {
-    if (key === param) {
-      return value;
-    }
+class ClientHelpers {
+
+  //Take in jQuery object, and location
+  constructor(jQ, location) {
+    this.jQ = jQ;
+    this.location = location;
   }
-  return false;
-};
 
-//Focus UI field input with selector selector and position cursor at end
-const cursorToEndOfInput = (selector) => {
-  const inputField = $(selector);
-  const value = inputField.val();
-  //If changing the value after focusing the field, the cursor will go to the end
-  inputField.focus().val('').val(value);
-};
+  //Return URL parameter param or false
+  urlParam(param) {
+    const urlParams = new URLSearchParams(this.location.search);
+    for (const [key, value] of urlParams) {
+      if (key === param) {
+        return value;
+      }
+    }
+    return false;
+  }
+
+  //Focus UI field input with selector selector and position cursor at end
+  cursorToEndOfInput(selector) {
+    const inputField = this.jQ(selector);
+    const value = inputField.val();
+    //If changing the value after focusing the field, the cursor will go to the end
+    inputField.focus().val('').val(value);
+  }
+
+}
