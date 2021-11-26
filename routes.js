@@ -39,37 +39,31 @@ const registerRoutes = (app) => {
     const loggedInUserID = database.validateUserCredentials(req.body.email, req.body.password);
     if (loggedInUserID) {
       lg(`User ${loggedInUserID} (${req.body.email}) logged in`);
-      //res.cookie("user_id", loggedInUserID);
       req.session.registerLogin(loggedInUserID);
     } else {
-      lg(`Login attempt for ${req.body.email} failed`, "UI");
+      lg(`Login attempt for ${req.body.email} failed`);
       res.statusCode = 403;
       return res.end(`Invalid or Missing Credentials`);
     }
     res.redirect('/urls');
   });
 
-  //Process logout, redirect to /login
-  app.post('/logout', (req, res) => {
-    //res.clearCookie("user_id");
-    req.session.registerLogout();
-    res.redirect("/login");
-  });
-
   //Render user registration form
   app.get('/register', (req, res) => {
-    const templateVars = { user:database.users[req.session.getUserID()] };
+    req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_BEFORE);
+    const templateVars = { user:database.users[req.session.getUserID()], flash: req.flash() };
     res.render('register', templateVars);
   });
 
-  //Register a new user, redirect to /urls
+  //Register a new user, log them in and redirect to /urls
   app.post('/register', (req, res) => {
     if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length >= constants.MIN_PASSWORD_LENGTH) {
       //Form data is valid, attempt creation of new user record
       const newUserID = database.addUser(req.body.email, req.body.password);
       if (newUserID) {
-        res.cookie('user_id', newUserID);
         lg(`Added user ${JSON.stringify(database.users[newUserID])}`);
+        req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_AFTER, "alert-success");
+        req.session.registerLogin(newUserID);
         res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
         //Email exists already
@@ -100,6 +94,12 @@ const registerRoutes = (app) => {
 
   //***** Routes below require the user to be logged in ****************************************
 
+  //Process logout, redirect to /login
+  app.post('/logout', redirectIfUnauthorized, (req, res) => {
+    req.session.registerLogout();
+    res.redirect("/login");
+  });
+
   //Render a list of all stored URLs for this user (must be logged in)
   app.get(['/urls','/'], redirectIfUnauthorized, (req, res) => {
     const urlsForUser = database.urlsForUser(req.session.getUserID());
@@ -120,6 +120,7 @@ const registerRoutes = (app) => {
       if (longURL) {
         const shortURL = database.addURL(longURL, req.session.getUserID());
         lg(`User ${database.getUserByID(req.session.getUserID()).email} created shortURL ${shortURL} for ${longURL}`);
+        req.flash(`constants.FLASH_MESSAGES.NEW_URL.SUCCESS ${longURL}.`);
         res.redirect(`/urls/${shortURL}`);
       } else {
         //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
@@ -161,17 +162,16 @@ const registerRoutes = (app) => {
     }
   });
 
-  //Render info page for URL indicated by :shortURL (must be logged in AND own the URL)
+  //Render info/edit page for URL indicated by :shortURL (must be logged in AND own the URL)
   app.get('/urls/:shortURL', redirectIfUnauthorized, (req, res) => {
     const shortURL = req.params.shortURL;
     const URLObject = database.getURL(shortURL, req.session.getUserID());
     if (URLObject) {
-      lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
       const templateVars = { shortURL, URLObject, user:database.users[req.session.getUserID()], flash: req.flash() };
       res.render('urls_show', templateVars);
     } else {
-      //Invalid shortURL - redirect to URL list
-      lg(`Invalid shortURL from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
+      //Invalid shortURL or forbidden (user doesn't own the shortURL) - redirect to URL list
+      lg(`Invalid shortURL or unauthorized request from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
       res.redirect(`/urls`);
     }
   });
