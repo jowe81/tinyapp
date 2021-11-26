@@ -27,6 +27,7 @@ const getURL = (shortURL, userID) => {
   return !userID || urls[shortURL].userID === userID ? urls[shortURL] : false;
 };
 
+//Take the output from getURLs and sort it by longURL
 const sortURLs = (urls) => {
   const sortedUrls = {};
   //Put all url objects into an array
