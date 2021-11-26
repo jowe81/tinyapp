@@ -28,9 +28,8 @@
                 </form>
               </td>
               <td>
-                <form method="GET" action="/urls/<%= url %>">
-                  <button class="btn btn-primary">Edit</button>
-                </form>
+                  <!-- Changed this from <button> to <a>, because the form for some reason would lose the querystring -->
+                  <a href="/urls/<%= url %>?edit=true" class="btn btn-primary">Edit</a>
               </td>
             </tr>
           <% } %>
