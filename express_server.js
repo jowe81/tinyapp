@@ -2,8 +2,10 @@
 const constants = require("./constants");
 const { registerRoutes } = require("./routes");
 
+//Setup logging
 const { lg, prefix } = require("@jowe81/lg");
 prefix.set("Server");
+lg(`TinyApp server starting...`);
 
 const express = require("express");
 const app = express();
@@ -18,9 +20,6 @@ const sessions = require("./middleware/sessions");
 app.use(sessions());
 const flash = require("./middleware/flash");
 app.use(flash());
-const loginChecker = require("./middleware/loginChecker");
-app.use(loginChecker());
-
 
 //Use EJS templating engine
 app.set('view engine','ejs');
