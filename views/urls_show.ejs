@@ -15,7 +15,7 @@
             <h5 class="card-title">Edit:</h5>
             <p>
               <form method = "POST" action = "/urls/<%= shortURL %>/update">
-                <input name="longURL" value="<%= URLObject.longURL %>">
+                <input name="longURL" id="longURL" value="<%= URLObject.longURL %>">
                 <button type="submit">Update</button>
               </form>
             </p>
@@ -24,5 +24,10 @@
       </div>
     </main>
     <%- include('partials/_scripts') %>
+    <script>
+      if (urlParam('edit')) {
+        cursorToEndOfInput("#longURL");
+      }
+    </script>
   </body>
 </html>
