@@ -5,6 +5,9 @@ const constants = {
   //Minimum password length required for user registration
   MIN_PASSWORD_LENGTH: 6,
 
+  //Length for auto-generated random generic IDs (used for short-URLs)
+  ID_LENGTH: 6,
+
   //Length for auto-generated random user IDs
   USERID_LENGTH: 6,
 
