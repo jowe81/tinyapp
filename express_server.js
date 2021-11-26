@@ -11,6 +11,8 @@ const express = require("express");
 const app = express();
 
 //Setup middleware
+const favicon = require('serve-favicon'); //Serve app icon
+app.use(favicon(require('path').join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static('public')); //Serve static files
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
