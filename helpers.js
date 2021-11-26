@@ -1,4 +1,4 @@
-//helpers.js: various helper functions
+//helpers.js: server-side helper functions
 
 const constants = require("./constants");
 

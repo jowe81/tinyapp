@@ -23,6 +23,7 @@
     </main>
     <%- include('partials/_scripts') %>
     <script>
+      //If user is editing, get the input field ready by focusing and putting the cursor to the end
       if (clientHelpers.urlParam('edit')) {
         clientHelpers.cursorToEndOfInput("#longURL");
       }
