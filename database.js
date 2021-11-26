@@ -40,19 +40,13 @@ const sortURLs = (urls) => {
   array.sort((a, b) => {
     const keyA = Object.keys(a)[0];
     const keyB = Object.keys(b)[0];
-    console.log("keyA/b",keyA,keyB);
-    console.log("keyA/b longurl",a[keyA].longURL,b[keyB].longURL);
-    console.log("B is greater:", a[keyA].longURL < b[keyB].longURL);
     return a[keyA].longURL > b[keyB].longURL ? 1 : -1;
   });
   //Reconstruct original object in order
   for (const url of array) {
-    sortedUrls[Object.keys(url)[0]] = url[Object.keys(url)[0]];
+    const key = Object.keys(url)[0];
+    sortedUrls[key] = url[Object.keys(url)[0]];
   }
-  console.log("Input:",urls);
-  console.log("Array:", array);
-  console.log("Sorted:", sortedUrls);
-
   return sortedUrls;
 };
 
