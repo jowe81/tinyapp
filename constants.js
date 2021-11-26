@@ -24,7 +24,12 @@ const constants = {
     NEW_URL: {
       NOTHING_ENTERED: "Looks like you did not enter anything - please enter a valid URL to shorten.",
       BAD_URL: "You entered an invalid URL. Please try again.",
-    }
+    },
+
+    //Messages related to the index page (list of URLs)
+    URL_INDEX: {
+      NO_RECORDS: `Welcome! Looks empty here. Why don't you <a href="/urls/new">add a new URL</a>?`,
+    },
     
   }
 };

@@ -102,12 +102,10 @@ const registerRoutes = (app) => {
     const urlsForUser = database.urlsForUser(req.userID());
     const noUrls = Object.keys(urlsForUser).length;
     const templateVars = { urls: urlsForUser, user:database.users[req.cookies.user_id], flash: req.flash() };
-    if (req.userID(database.validateUserID)) {
-      lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
-    } else {
-      lg(`Asking user to register /login`);
-      req.flash('Looks empty here, eh? Well, you need to log in to view and store URLs. Please register or login.');
+    if (!noUrls) {
+      req.flash(constants.FLASH_MESSAGES.URL_INDEX.NO_RECORDS);
     }
+    lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
     res.render('urls_index', templateVars);
   });
 
