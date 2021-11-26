@@ -17,12 +17,17 @@ const sessions = (req, res, next) => {
     _sessions[sessionID] = {
       logins: [],
       requests: [],
+      userID: "",
     };
     return sessionID;
   };
 
   const _getNoRequests = (sessionID) => {
     return _sessions[sessionID].requests.length;
+  };
+
+  const _sessionIDIsValid = (sessionID) => {
+    return typeof _sessions[sessionID] === 'object';
   };
 
   return (req, res, next) => {
@@ -34,11 +39,18 @@ const sessions = (req, res, next) => {
         //Return reference to session object
         getObject: () => _sessions[req.sessionID],
 
-        //Add timestamp to login info
-        registerLogin: () => {
+        //Return the userID of the current user (will be an empty string if none logged in)
+        getUserID: () => _sessions[req.sessionID].userID,
+
+        //Add userID property to session object and add timestamp to logins array
+        registerLogin: (userID) => {
           _sessions[req.sessionID].logins.push(new Date());
+          _sessions[req.sessionID].userID = userID;
           lg(`[${req.sessionID}]: Login`, logPrefix);
         },
+
+        //Clear userID property on session object
+        registerLogout: () => _sessions[req.sessionID].userID = "",
 
         hasLoggedInBefore: () => _sessions[req.sessionID].logins.length > 0,
 
@@ -61,8 +73,8 @@ const sessions = (req, res, next) => {
       };
     }
 
-    //Initialize new session if not in a session yet
-    if (!req.cookies.session_id) {
+    //Initialize new session if not in a session yet or an invalid session id has been passed
+    if (!(req.cookies.session_id && _sessionIDIsValid(req.cookies.session_id))) {
       const sessionID = _initSessionObject();
       req.sessionID = sessionID;
       res.cookie("session_id", sessionID);
