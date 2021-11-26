@@ -23,6 +23,10 @@ const constants = {
     LOGIN: {
       WELCOME: "Welcome! TinyApp lets you shorten and store URLs. Register or login to begin.",
       WELCOME_BACK: "Welcome back! Login to view and store your URLs.",
+      BAD_CREDENTIALS: { 
+        message: "Invalid or missing credentials. Please try again.",
+        type: "alert-warning",
+      },
       GOODBYE: "You logged out successfully. Goodbye!",
     },
 
@@ -53,7 +57,16 @@ const constants = {
       WELCOME_AFTER: {
         message: "Registration successful - Welcome to TinyApp!",
         type: "alert-success",
+      },
+      EMAIL_INVALID: {
+        message: "Invalid email address and/or password too short.",
+        type: "alert-warning",
+      },
+      EMAIL_EXISTS: {
+        message: `This email address has alread been registered. <a href="/login">Login</a> or register with a different email.`,
+        type: "alert-warning",
       }
+
     }
     
   }

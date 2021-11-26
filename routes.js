@@ -34,18 +34,18 @@ const registerRoutes = (app) => {
     res.render('login', templateVars);
   });
 
-  //Process login, redirect to /urls
+  //Process login, redirect to /urls on success; back to /login on failure
   app.post('/login', (req, res) => {
     const loggedInUserID = database.validateUserCredentials(req.body.email, req.body.password);
     if (loggedInUserID) {
       lg(`User ${loggedInUserID} (${req.body.email}) logged in`);
       req.session.registerLogin(loggedInUserID);
+      return res.redirect('/urls');
     } else {
       lg(`Login attempt for ${req.body.email} failed`);
-      res.statusCode = 403;
-      return res.end(`Invalid or Missing Credentials`);
+      req.flash(constants.FLASH_MESSAGES.LOGIN.BAD_CREDENTIALS);
+      return res.redirect('/login');
     }
-    res.redirect('/urls');
   });
 
   //Render user registration form
@@ -55,7 +55,7 @@ const registerRoutes = (app) => {
     res.render('register', templateVars);
   });
 
-  //Register a new user, log them in and redirect to /urls
+  //Register a new user, log them in and redirect to /urls on success; or back to /register
   app.post('/register', (req, res) => {
     if (helpers.isValidEmail(req.body.email) && req.body.password && req.body.password.length >= constants.MIN_PASSWORD_LENGTH) {
       //Form data is valid, attempt creation of new user record
@@ -64,18 +64,16 @@ const registerRoutes = (app) => {
         lg(`Added user ${JSON.stringify(database.users[newUserID])}`);
         req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_AFTER);
         req.session.registerLogin(newUserID);
-        res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
+        return res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
       } else {
         //Email exists already
-        lg(`Attempt to add new user failed`);
-        res.statusCode = 400;
-        res.end("Email address already exists\n");
+        req.flash(constants.FLASH_MESSAGES.REGISTER.EMAIL_EXISTS);
       }
     } else {
       //Invalid email address and/or password too short
-      res.statusCode = 400;
-      res.end("Invalid email address and/or password too short\n");
+      req.flash(constants.FLASH_MESSAGES.REGISTER.EMAIL_INVALID);
     }
+    res.redirect('/register');
   });
 
   //Redirect from :shortURL to its target
