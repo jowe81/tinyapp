@@ -21,13 +21,16 @@ const constants = {
 
     //Messages related to login/logout
     LOGIN: {
-      WELCOME: "Welcome! TinyApp lets you shorten and store URLs. Register or login to begin.",
+      WELCOME: "TinyApp lets you shorten and store URLs. Register or login to begin.",
       WELCOME_BACK: "Welcome back! Login to view and store your URLs.",
       BAD_CREDENTIALS: {
         message: "Invalid or missing credentials. Please try again.",
         type: "alert-warning",
       },
-      GOODBYE: "You logged out successfully. Goodbye!",
+      GOODBYE: {
+        message: "You logged out successfully. Goodbye!",
+        type: "alert-success",
+      }
     },
 
     //Messages related to creating new short-URLs
