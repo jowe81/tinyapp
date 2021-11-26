@@ -7,8 +7,7 @@ const { lg } = require("@jowe81/lg");
 
 const redirectIfUnauthorized = (req, res, next) => {
   //Routing-middleware: redirect to /login if not authorized
-  if (!database.getUserByID(req.cookies.user_id)) {
-    req.flash('Please register and login to view and store your URLs!');
+  if (!database.getUserByID(req.session.getUserID())) {
     return res.redirect("/login");
   }
   next();
@@ -40,8 +39,8 @@ const registerRoutes = (app) => {
     const loggedInUserID = database.validateUserCredentials(req.body.email, req.body.password);
     if (loggedInUserID) {
       lg(`User ${loggedInUserID} (${req.body.email}) logged in`);
-      res.cookie("user_id", loggedInUserID);
-      req.session.registerLogin();
+      //res.cookie("user_id", loggedInUserID);
+      req.session.registerLogin(loggedInUserID);
     } else {
       lg(`Login attempt for ${req.body.email} failed`, "UI");
       res.statusCode = 403;
@@ -52,13 +51,14 @@ const registerRoutes = (app) => {
 
   //Process logout, redirect to /login
   app.post('/logout', (req, res) => {
-    res.clearCookie("user_id");
+    //res.clearCookie("user_id");
+    req.session.registerLogout();
     res.redirect("/login");
   });
 
   //Render user registration form
   app.get('/register', (req, res) => {
-    const templateVars = { user:database.users[req.cookies.user_id] };
+    const templateVars = { user:database.users[req.session.getUserID()] };
     res.render('register', templateVars);
   });
 
@@ -102,13 +102,13 @@ const registerRoutes = (app) => {
 
   //Render a list of all stored URLs for this user (must be logged in)
   app.get(['/urls','/'], redirectIfUnauthorized, (req, res) => {
-    const urlsForUser = database.urlsForUser(req.userID());
+    const urlsForUser = database.urlsForUser(req.session.getUserID());
     const noUrls = Object.keys(urlsForUser).length;
-    const templateVars = { urls: urlsForUser, user:database.users[req.cookies.user_id], flash: req.flash() };
+    const templateVars = { urls: urlsForUser, user:database.users[req.session.getUserID()], flash: req.flash() };
     if (!noUrls) {
       req.flash(constants.FLASH_MESSAGES.URL_INDEX.NO_RECORDS);
     }
-    lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
+    lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.session.getUserID()).email}`);
     res.render('urls_index', templateVars);
   });
 
@@ -118,8 +118,8 @@ const registerRoutes = (app) => {
     if (req.body.longURL) {
       const longURL = helpers.verifyURL(req.body.longURL);
       if (longURL) {
-        const shortURL = database.addURL(longURL, req.cookies.user_id);
-        lg(`User ${database.getUserByID(req.cookies.user_id).email} created shortURL ${shortURL} for ${longURL}`);
+        const shortURL = database.addURL(longURL, req.session.getUserID());
+        lg(`User ${database.getUserByID(req.session.getUserID()).email} created shortURL ${shortURL} for ${longURL}`);
         res.redirect(`/urls/${shortURL}`);
       } else {
         //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
@@ -135,7 +135,7 @@ const registerRoutes = (app) => {
 
   //Render form to create a new shortURL (must be logged in)
   app.get('/urls/new', redirectIfUnauthorized, (req, res) => {
-    const templateVars = { user:database.users[req.cookies.user_id], flash: req.flash() };
+    const templateVars = { user:database.users[req.session.getUserID()], flash: req.flash() };
     res.render('urls_new', templateVars);
   });
 
@@ -164,10 +164,10 @@ const registerRoutes = (app) => {
   //Render info page for URL indicated by :shortURL (must be logged in AND own the URL)
   app.get('/urls/:shortURL', redirectIfUnauthorized, (req, res) => {
     const shortURL = req.params.shortURL;
-    const URLObject = database.getURL(shortURL, req.cookies.user_id);
+    const URLObject = database.getURL(shortURL, req.session.getUserID());
     if (URLObject) {
       lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
-      const templateVars = { shortURL, URLObject, user:database.users[req.cookies.user_id], flash: req.flash() };
+      const templateVars = { shortURL, URLObject, user:database.users[req.session.getUserID()], flash: req.flash() };
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL - redirect to URL list
