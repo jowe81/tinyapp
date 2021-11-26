@@ -9,6 +9,7 @@ const express = require("express");
 const app = express();
 
 //Setup middleware
+app.use(express.static('public')); //Serve static files
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const bodyParser = require("body-parser");
@@ -19,6 +20,7 @@ const flash = require("./middleware/flash");
 app.use(flash());
 const loginChecker = require("./middleware/loginChecker");
 app.use(loginChecker());
+
 
 //Use EJS templating engine
 app.set('view engine','ejs');
