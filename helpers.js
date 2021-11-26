@@ -31,8 +31,8 @@ const generateRandomString = (length = 6) => {
 };
 
 //Generate random ID with length as specified in ./constants
-const generateID = () => {
-  return generateRandomString(constants.ID_LENGTH);
+const generateID = (length) => {
+  return generateRandomString(length || constants.ID_LENGTH);
 };
 
 //Basic email string validity check (returns true or false)
