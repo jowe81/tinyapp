@@ -2,6 +2,7 @@
 
 const constants = require("./constants");
 
+//Returns a string with a range of ASCII characters
 const getCharacterRange = (offset, range) => {
   let i;
   let chars = "";
@@ -11,18 +12,19 @@ const getCharacterRange = (offset, range) => {
   return chars;
 };
 
+//Returns a single random alphanumeric character
 const generateRandomCharacter = () => {
   //Assemble all digits, uppercase- and lowercase characters into a single string
   let allChars = getCharacterRange(48,10) + getCharacterRange(65, 26) + getCharacterRange(97, 26);
-  //Return random character
+  //Return character from a random position in the string
   const pos = Math.floor(Math.random() * allChars.length);
   return allChars[pos];
 };
 
-const generateRandomString = (length) => {
-  const l = 6 || length;
+//Returns a string of \w characters of specified length
+const generateRandomString = (length = 6) => {
   let str = "";
-  for (let i = 0; i < l; i++) {
+  for (let i = 0; i < length; i++) {
     str += generateRandomCharacter();
   }
   return str;
@@ -33,9 +35,18 @@ const generateID = () => {
   return generateRandomString(constants.ID_LENGTH);
 };
 
-//Basic email string validity check
+//Basic email string validity check (returns true or false)
 const isValidEmail = (email) => {
-  return email.trim().length > 0;
+  //Requires:
+  // - a sequence of one or more of: alphanumeric characters, hyphen, underscore (username)
+  // - the @ sign
+  // - one or more of: a sequence of alphanum chars, hyphens followed by a dot (domain names)
+  // - a dot followed by at least 2 letters (TLD)
+  const rgx = new RegExp(/^[\w-_.]+@([\w-]+.)+[a-z]{2,}/i);
+  const match = rgx.exec(email);
+  if (match) {
+    return match[0];
+  }
 };
 
 //Return true if user with email email exists in users
