@@ -97,7 +97,10 @@ const registerRoutes = (app) => {
     }
   });
 
-  //Render a list of all stored URLs for currently logged-in user, or suggest to register/login
+
+  //***** Routes below require the user to be logged in ****************************************
+
+  //Render a list of all stored URLs for this user (must be logged in)
   app.get(['/urls','/'], redirectIfUnauthorized, (req, res) => {
     const urlsForUser = database.urlsForUser(req.userID());
     const noUrls = Object.keys(urlsForUser).length;
@@ -108,10 +111,6 @@ const registerRoutes = (app) => {
     lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.cookies.user_id).email}`);
     res.render('urls_index', templateVars);
   });
-
-
-
-  //***** Routes below require the user to be logged in ****************************************
 
   //Generate and store shortURL (must be logged in), then redirect to URL info page
   app.post('/urls', redirectIfUnauthorized, (req, res) => {
@@ -150,11 +149,14 @@ const registerRoutes = (app) => {
 
   //Edit/Update entry (must be logged in)
   app.post('/urls/:shortURL/update', redirectIfUnauthorized, (req, res) => {
-    const shortURL = req.params.shortURL;
-    const longURL = req.body.longURL;
-    lg(`Updating ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
-    database.updateURL(req.params.shortURL, longURL);
-    res.redirect('/urls');
+    const longURL = helpers.verifyURL(req.body.longURL);
+    if (longURL) {
+      database.updateURL(req.params.shortURL, longURL);
+      res.redirect('/urls');
+    } else {
+      req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL);
+      res.redirect(`/urls/${req.params.shortURL}`);
+    }
   });
 
   //Render info page for URL indicated by :shortURL (must be logged in AND own the URL)
@@ -163,7 +165,7 @@ const registerRoutes = (app) => {
     const URLObject = database.getURL(shortURL, req.cookies.user_id);
     if (URLObject) {
       lg(`Rendering info for ${req.socket.remoteAddress}:${req.socket.remotePort}/${shortURL}`);
-      const templateVars = { shortURL, URLObject, user:database.users[req.cookies.user_id] };
+      const templateVars = { shortURL, URLObject, user:database.users[req.cookies.user_id], flash: req.flash() };
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL - redirect to URL list

@@ -28,7 +28,7 @@ const constants = {
 
     //Messages related to the index page (list of URLs)
     URL_INDEX: {
-      NO_RECORDS: `Welcome! Looks empty here. Why don't you <a href="/urls/new">add a new URL</a>?`,
+      NO_RECORDS: `Looks empty here. Why don't you <a href="/urls/new">add a new URL</a>?`,
     },
     
   }
