@@ -24,5 +24,9 @@
     </header>
     
     <% if (typeof flash === 'object' && flash.length > 0) { %>
-      <div class='alert <%= flash[0].type %>'><%- flash[0].message %></div>
+      <div id="flash-messages">
+      <% for (msgObj of flash) { %>
+        <div class='alert <%= msgObj.type %> my-0'><%- msgObj.message %></div>
+      <% } %>
+      </div>
     <% } %>
