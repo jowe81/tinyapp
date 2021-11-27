@@ -1,7 +1,7 @@
 # TinyApp
 
 A URL-shortening app. 
-(Lighthouse Labs Flex Program Module 2 Project)
+(Lighthouse Labs Flex Program Module 3 Project)
 
 ## Features:
 
@@ -32,7 +32,7 @@ npm install
 ```
 ### Configure it:
 * Visit the configuration file, ```constants.js``` to adjust the TCP port and security settings. Default port is 8080.
-* Note that command line argument takes precedence over settings in ```constants.js```.
+* Note that the command line argument takes precedence over settings in ```constants.js```.
 
 ### Run it:
 ```bash
