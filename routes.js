@@ -5,13 +5,15 @@ const database = require("./database");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
-//Routing-middleware: redirect to /login if not authorized
-const redirectIfUnauthorized = (req, res, next) => {
-  if (!database.getUserByID(req.session.getUserID())) {
-    return res.redirect("/login");
-  }
-  next();
-};
+////Routing-middleware: redirect to /login if not authorized
+// const redirectIfUnauthorized = (req, res, next) => {
+//   if (!database.getUserByID(req.session.getUserID())) {
+//     return res.redirect("/login");
+//   }
+//   next();
+// };
+
+const redirectIfUnauthorized = require("./middleware/routing_middleware/redirectIfUnauthorized");
 
 
 const registerRoutes = (app) => {
@@ -94,6 +96,8 @@ const registerRoutes = (app) => {
 
   //Process logout, redirect to /login
   app.post('/logout', redirectIfUnauthorized, (req, res) => {
+    const user = database.getUserByID(req.session.getUserID());
+    lg(`User ${user.id} (${user.email}) logged out.`);
     req.session.registerLogout();
     res.redirect("/login");
   });
@@ -169,6 +173,7 @@ const registerRoutes = (app) => {
       const templateVars = {
         shortURL,
         URLObject,
+        user:database.users[req.session.getUserID()],
         fullLocalHref: `${req.protocol}://${req.get('host')}/u/${shortURL}`,
         flash: req.flash(),
       };
