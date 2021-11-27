@@ -81,7 +81,7 @@ const users = {
 
 //Add new user and return ID or return false if email exists.
 const addUser = (email, password) => {
-  if (!helpers.emailExists(users, email)) {
+  if (!helpers.emailExists(users, email) && helpers.isValidEmail(email)) {
     const userID = helpers.generateUserID();
     users[userID] = {
       id: userID,
@@ -94,14 +94,7 @@ const addUser = (email, password) => {
 };
 
 //Return user object if user with id exists
-const getUserByID = (id) => {
-  for (const userID in users) {
-    if (userID === id) {
-      return users[userID];
-    }
-  }
-  return false;
-};
+const getUserByID = (id) => users[id];
 
 //Return user object if user with email exists
 const getUserByEmail = (email) => {
@@ -110,7 +103,7 @@ const getUserByEmail = (email) => {
       return users[userID];
     }
   }
-  return false;
+  return undefined;
 };
 
 //Return userID if credentials are valid (for Login)
@@ -120,9 +113,7 @@ const validateUserCredentials = (email, password) => {
 };
 
 //True if record with userID exists
-const validateUserID = (userID) => {
-  return typeof users[userID] === 'object';
-};
+const validateUserID = (userID) => getUserByID(userID) !== undefined;
 
 
 
@@ -132,6 +123,7 @@ module.exports = {
   addURL,
   updateURL,
   getURL,
+  sortURLs,
   getURLs,
   urlsForUser,
   users,
