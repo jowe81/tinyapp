@@ -118,16 +118,16 @@ const registerRoutes = (app) => {
       if (longURL) {
         const shortURL = database.addURL(longURL, req.session.getUserID());
         lg(`User ${database.getUserByID(req.session.getUserID()).email} created shortURL ${shortURL} for ${longURL}`);
-        req.flash(constants.FLASH_MESSAGES.NEW_URL.SUCCESS);
+        req.flash(constants.FLASH_MESSAGES.EDIT_URL.SUCCESS_CREATE);
         res.redirect(`/urls/${shortURL}`);
       } else {
         //User entered invalid URL. Send them back to the form, and include their input so they can adjust it
-        req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL);
+        req.flash(constants.FLASH_MESSAGES.EDIT_URL.BAD_URL);
         res.redirect(`/urls/new?longURL=${req.body.longURL}`);
       }
     } else {
       //User didn't enter anything
-      req.flash(constants.FLASH_MESSAGES.NEW_URL.NOTHING_ENTERED);
+      req.flash(constants.FLASH_MESSAGES.EDIT_URL.NOTHING_ENTERED);
       res.redirect('/urls/new');
     }
   });
@@ -152,10 +152,11 @@ const registerRoutes = (app) => {
     if (longURL) {
       //Success - updated URL verified
       database.updateURL(req.params.shortURL, longURL);
+      req.flash(constants.FLASH_MESSAGES.EDIT_URL.SUCCESS_UPDATE);
       res.redirect('/urls');
     } else {
       //New URL is invalid - redirect user to try again
-      req.flash(constants.FLASH_MESSAGES.NEW_URL.BAD_URL);
+      req.flash(constants.FLASH_MESSAGES.EDIT_URL.BAD_URL);
       res.redirect(`/urls/${req.params.shortURL}?edit=true`);
     }
   });

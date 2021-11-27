@@ -33,8 +33,8 @@ const constants = {
       }
     },
 
-    //Messages related to creating new short-URLs
-    NEW_URL: {
+    //Messages related to creating/editing short-URLs
+    EDIT_URL: {
       NOTHING_ENTERED: {
         message: "Looks like you did not enter anything - please enter a valid URL to shorten.",
         type: "alert-warning"
@@ -43,10 +43,14 @@ const constants = {
         message: "You entered an invalid URL. Please try again.",
         type: "alert-warning",
       },
-      SUCCESS: {
-        message: "TinyURL created successfully.",
+      SUCCESS_CREATE: {
+        message: "URL created successfully.",
         type: "alert-success"
-      }
+      },
+      SUCCESS_UPDATE: {
+        message: "URL updated successfully.",
+        type: "alert-success"
+      },
     },
 
     //Messages related to the index page (list of URLs)
