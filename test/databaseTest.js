@@ -107,7 +107,6 @@ describe("database.validateUserID", () => {
   
   it(`returns true for a valid ID`, () => {
     const userID = database.validateUserID("rndmID");
-    const expectedOutput = true;
     assert.strictEqual(userID, true);
   });
 
