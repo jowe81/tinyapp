@@ -9,8 +9,9 @@
     <main>
     <div class="card text-center">
         <div class="card-body">
-          <h5 class="card-title">TinyURL for: <%= URLObject.longURL %></h5>
-          <p class="card-text">Short URL (click&nbsp;to&nbsp;visit): <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
+          <h5 class="card-title">TinyURL for <%= URLObject.longURL %></h5>
+          <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
+          <p class="card-text"><a href="<%= fullLocalHref %>"><%= fullLocalHref %></a></p>
           <h5 class="card-title">Edit:</h5>
           <div class="d-flex justify-content-center">
             <form class="form-inline" method="POST" action = "/urls/<%= shortURL %>/update?_method=PUT">

@@ -165,7 +165,12 @@ const registerRoutes = (app) => {
     const shortURL = req.params.shortURL;
     const URLObject = database.getURL(shortURL, req.session.getUserID());
     if (URLObject) {
-      const templateVars = { shortURL, URLObject, user:database.users[req.session.getUserID()], flash: req.flash() };
+      const templateVars = {
+        shortURL,
+        URLObject,
+        fullLocalHref: `${req.protocol}://${req.get('host')}/u/${shortURL}`,
+        flash: req.flash(),
+      };
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL or forbidden (user doesn't own the shortURL) - redirect to URL list
