@@ -67,3 +67,21 @@ describe("helpers.verifyURL", () => {
   }
 
 });
+
+describe('helpers.isValidEmail', () => {
+
+  const validEmails = ["johannes@drweber.de", "vancouver-playhouse@cov.ca", "k_m.smith@gov.com.au"];
+  for (const email of validEmails) {
+    it(`returns true for ${email}`, () => {
+      assert.equal(helpers.isValidEmail(email), true);
+    });
+  }
+
+  const badEmails = ["just.a.string", "@username.missing.ca", "domain.missing@", "and@invalid_domain.ca", "and@missing-tld"];
+  for (const email of badEmails) {
+    it(`returns false for ${email}`, () => {
+      assert.equal(helpers.isValidEmail(email), false);
+    });
+  }
+
+});

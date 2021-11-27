@@ -50,11 +50,8 @@ const isValidEmail = (email) => {
   // - the @ sign
   // - one or more of: a sequence of alphanum chars, hyphens followed by a dot (domain names)
   // - a dot followed by at least 2 letters (TLD)
-  const rgx = new RegExp(/^[\w-_.]+@([\w-]+.)+[a-z]{2,}/i);
-  const match = rgx.exec(email);
-  if (match) {
-    return match[0];
-  }
+  const rgx = new RegExp(/^[\w-_.]+@([a-z0-9-]+\.)+[a-z]{2,}/i);
+  return rgx.test(email);
 };
 
 //Return true if user with email email exists in users
@@ -78,7 +75,7 @@ const verifyURL = (url) => {
   // - zero or more path components, consisting of a slash followed by letters or digits (also allowing -, _, .)
   // - if protocol is missing or invalid, it will return http:// as the protocol
   // Does not check a potentially present querystring
-  const rgx = new RegExp(/(?<protocol>^[a-z]{3,4}:\/\/)?([\w-]+\.)+[a-z]{2,}(\/[\w-_.]+)*/i);
+  const rgx = new RegExp(/(?<protocol>^[a-z]{3,4}:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/[\w-.]+)*/i);
   const match = rgx.exec(trimmedURL);
   if (match) {
     const protocol = match.groups.protocol;
