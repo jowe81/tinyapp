@@ -139,7 +139,7 @@ const registerRoutes = (app) => {
   });
 
   //Delete entry (must be logged in), redirect to index
-  app.post('/urls/:shortURL/delete', redirectIfUnauthorized, (req, res) => {
+  app.delete('/urls/:shortURL/delete', redirectIfUnauthorized, (req, res) => {
     const shortURL = req.params.shortURL;
     lg(`Deleting ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
     delete database.urls[req.params.shortURL];
@@ -147,7 +147,7 @@ const registerRoutes = (app) => {
   });
 
   //Edit/Update entry (must be logged in)
-  app.post('/urls/:shortURL/update', redirectIfUnauthorized, (req, res) => {
+  app.put('/urls/:shortURL/update', redirectIfUnauthorized, (req, res) => {
     const longURL = helpers.verifyURL(req.body.longURL);
     if (longURL) {
       //Success - updated URL verified

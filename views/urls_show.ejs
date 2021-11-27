@@ -13,7 +13,7 @@
           <p class="card-text">Short URL (click&nbsp;to&nbsp;visit): <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
           <h5 class="card-title">Edit:</h5>
           <div class="d-flex justify-content-center">
-            <form class="form-inline" method="POST" action = "/urls/<%= shortURL %>/update">
+            <form class="form-inline" method="POST" action = "/urls/<%= shortURL %>/update?_method=PUT">
               <input class="form-control m-2" style="width:300px" name="longURL" id="longURL" value="<%= URLObject.longURL %>">
               <button class="form-control m-2 button btn-primary" type="submit">Update</button>
             </form>

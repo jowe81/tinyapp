@@ -14,6 +14,8 @@ const app = express();
 
 //Setup middleware
 app.use(express.static('public')); //Serve static files
+const methodOverride = require('method-override');
+app.use(methodOverride('_method')); //Support PUT/DELETE for forms
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 const bodyParser = require("body-parser");
