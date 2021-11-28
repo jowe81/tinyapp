@@ -2,6 +2,9 @@ const constants = {
 
   PORT: 8080,
 
+  //File to persist the database to
+  DB_FILE: "./app_data/database.js",
+
   //Minimum password length required for user registration
   MIN_PASSWORD_LENGTH: 6,
 
