@@ -2,12 +2,13 @@
 const helpers = require("./helpers");
 const bcrypt = require("bcrypt");
 const constants = require("./constants");
+const { lg } = require("@jowe81/lg");
 
 
 //************** URLS data and methods ******************
 
 //This is where we hold URLs; prepopulate with defaults below
-const urls = {
+let urls = {
   "b2xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "rndmID" },
   "9sm5xK": { longURL: "http://www.google.com", userID: "rndmID" },
 };
@@ -73,7 +74,7 @@ const urlsForUser = (userID) => userID ? getURLs(userID) : {};
 //************** USERS data and methods ******************
 
 //This is where we hold users; prepopulate with defaults below
-const users = {
+let users = {
   "rndmID": {
     id: "rndmID",
     email: "johannes@drweber.de",
@@ -120,7 +121,7 @@ const validateUserID = (userID) => getUserByID(userID) !== undefined;
 //************** Analytics data and methods ******************
 
 //This is where we hold analytics
-const analytics = {
+let analytics = {
   "/path/to/page": [], //Keep an array of visits for each page
 };
 
@@ -204,6 +205,15 @@ const getAnalytics = (path) => {
 
 
 
+//*********************** Persistence ********************
+
+const persistToFile = () => {
+};
+
+const initFromFile = () => {
+};
+
+
 module.exports = {
   //URL Database functions
   addURL,
@@ -230,4 +240,8 @@ module.exports = {
   uniqueVisitorsCount,
   registerVisit,
   getAnalytics,
+
+  //Persistence
+  persistToFile,
+  initFromFile,
 };
