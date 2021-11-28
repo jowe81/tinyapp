@@ -143,13 +143,13 @@ describe("database.getVisits", () => {
 
 });
 
-describe("database.getUniqueVisitorsCount", () => {
+describe("database.uniqueVisitorsCount", () => {
 
   const testPath = "/some/page";
   const testVisitor = "testVisitorID";
 
   it(`returns 0 for a page that has never been visited`, () => {
-    assert.equal(database.getUniqueVisitorsCount(testPath), 0);
+    assert.equal(database.uniqueVisitorsCount(testPath), 0);
   });
   
   //Implicitly does some testing for getUniqueVisitors() as well
@@ -158,7 +158,37 @@ describe("database.getUniqueVisitorsCount", () => {
     database.registerVisit(testPath, "otherVisitor");
     database.registerVisit(testPath, "otherVisitor2");
     database.registerVisit(testPath, testVisitor);
-    assert.equal(database.getUniqueVisitorsCount(testPath), 3);
+    assert.equal(database.uniqueVisitorsCount(testPath), 3);
+  });
+
+});
+
+describe("database.getAnalytics", () => {
+
+  const testPath = "/some/other/page/yet";
+  const testVisitor = "anotherTestVisitorID";
+
+  it(`returns a properly initiated object for a page that has not been visited`, () => {
+    const analytics = database.getAnalytics("/some/path");
+    assert.isObject(analytics);
+    assert.equal(analytics.uniqueVisitorsCount, 0);
+    assert.equal(analytics.totalVisits, 0);
+    assert.isArray(analytics.visits);
+    assert.equal(analytics.visits.length, 0);
+  });
+
+  it(`returns visit data for a given page`, () => {
+    database.registerVisit(testPath, testVisitor);
+    database.registerVisit(testPath, "otherVisitor3");
+    database.registerVisit(testPath, "otherVisitor3");
+    database.registerVisit(testPath, testVisitor);
+
+    const analytics = database.getAnalytics(testPath);
+    assert.isObject(analytics);
+    assert.equal(analytics.uniqueVisitorsCount, 2);
+    assert.equal(analytics.totalVisits, 4);
+    assert.isArray(analytics.visits);
+    assert.equal(analytics.visits.length, 4);
   });
 
 });
