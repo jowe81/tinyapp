@@ -2,6 +2,10 @@
 .loginregister {
   margin-top:50px!important;
   border: 1px solid rgba(0, 181, 57, 0.283);
-  width:380px;
+  width:300px;
   border-radius: 10px;
+}
+
+.loginregister input {
+  width: 250px;
 }
