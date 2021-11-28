@@ -118,3 +118,47 @@ describe("database.validateUserID", () => {
 
 });
 
+
+
+
+//******************** Analytics Database functions *******************
+
+describe("database.getVisits", () => {
+
+  const testPath = "/urls";
+  const testVisitor = "testVisitorID";
+
+  it(`returns an empty array for a page that hasn't been visited by a given visitor`, () => {
+    assert.deepEqual(database.getVisits(testPath, testVisitor), []);
+  });
+
+  //Implicitly does some testing for registerVisit() as well
+  it(`returns only visit objects for visits page visits by a given visitor`, () => {
+    database.registerVisit(testPath, testVisitor);
+    database.registerVisit(testPath, "otherVisitor");
+    database.registerVisit(testPath, testVisitor);
+    const visits = database.getVisits(testPath, testVisitor);
+    assert.equal(visits.length, 2);
+  });
+
+});
+
+describe("database.getUniqueVisitorsCount", () => {
+
+  const testPath = "/some/page";
+  const testVisitor = "testVisitorID";
+
+  it(`returns 0 for a page that has never been visited`, () => {
+    assert.equal(database.getUniqueVisitorsCount(testPath), 0);
+  });
+  
+  //Implicitly does some testing for getUniqueVisitors() as well
+  it(`returns # of unique visitors for a given page`, () => {
+    database.registerVisit(testPath, testVisitor);
+    database.registerVisit(testPath, "otherVisitor");
+    database.registerVisit(testPath, "otherVisitor2");
+    database.registerVisit(testPath, testVisitor);
+    assert.equal(database.getUniqueVisitorsCount(testPath), 3);
+  });
+
+});

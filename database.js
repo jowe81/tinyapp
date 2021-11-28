@@ -115,10 +115,79 @@ const validateUserCredentials = (email, password) => {
 //True if record with userID exists
 const validateUserID = (userID) => getUserByID(userID) !== undefined;
 
+//************** Analytics data and methods ******************
+
+//This is where we hold analytics
+const analytics = {
+  "/path/to/page": [], //Keep an array of visits for each page
+};
+
+//Return page record for path (or undefined)
+const getPageRecord = (path) => analytics[path];
+
+//Return array of records of visits from visitorID to path, or [] if none
+const getVisits = (path, visitorID) => {
+  let visits = [];
+  let pageRecord = getPageRecord(path);
+  if (pageRecord) {
+    //Select all visits associated with visitorID
+    visits = pageRecord.filter(val => val.visitorID === visitorID);
+  }
+  return visits;
+};
+
+//No of visits to path from visitorID
+const getVisitCount = (path, visitorID) => getVisits(path, visitorID).length;
+
+//Has visitorID visited page with path before?
+const hasVisited = (path, visitorID) => getVisitCount(path, visitorID) > 0;
+
+//Return array of IDs for all visitors to path
+const getUniqueVisitors = (path) => {
+  let visitors = [];
+  let pageRecord = getPageRecord(path);
+  if (pageRecord) {
+    //Loop through visits and collect unique visitorIDs in visitors array
+    pageRecord.forEach(val => {
+      if (!visitors.includes(val.visitorID)) {
+        visitors.push(val.visitorID);
+        return true;
+      }
+    });
+  }
+  return visitors;
+};
+
+//No of unique visitors to page path
+const getUniqueVisitorsCount = (path) => getUniqueVisitors(path).length;
+
+//Log visit from visitorID to URL-path path
+const registerVisit = (path, visitorID) => {
+
+  const initPageRecord = (path) => {
+    analytics[path] = [];
+  };
+
+  //Return visit object with timestamp and visitorID
+  const createVisitRecord = (visitorID) => {
+    return {
+      time: new Date(),
+      visitorID: visitorID,
+    };
+  };
+
+  //Initialize page record and visits array if this is the first visit to page
+  if (!getPageRecord(path)) initPageRecord(path);
+  //Append record for this visit
+  analytics[path].push(createVisitRecord(visitorID));
+};
+
+
 
 
 
 module.exports = {
+  //URL Database functions
   urls,
   addURL,
   updateURL,
@@ -126,10 +195,22 @@ module.exports = {
   sortURLs,
   getURLs,
   urlsForUser,
+
+  //Users Database functions
   users,
   addUser,
   getUserByID,
   getUserByEmail,
   validateUserCredentials,
   validateUserID,
+
+  //Analytics Database functions
+  analytics,
+  getPageRecord,
+  getVisits,
+  getVisitCount,
+  hasVisited,
+  getUniqueVisitors,
+  getUniqueVisitorsCount,
+  registerVisit,
 };
