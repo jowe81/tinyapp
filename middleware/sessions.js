@@ -30,6 +30,9 @@ const sessions = (req, res, next) => {
     return typeof _sessions[sessionID] === 'object';
   };
 
+  //Return a shortened ID for logging
+  const _shortID = (sessionID, length = 12) => sessionID.substr(0, length);
+
   return (req, res, next) => {
 
     //Initialize functionality
@@ -46,7 +49,7 @@ const sessions = (req, res, next) => {
         registerLogin: (userID) => {
           _sessions[req.sessionID].logins.push(new Date());
           _sessions[req.sessionID].userID = userID;
-          lg(`[${req.sessionID}]: Login`, logPrefix);
+          lg(`${_shortID(req.sessionID)} Login (${userID})`, logPrefix);
         },
 
         //Clear userID property on session object
@@ -57,7 +60,7 @@ const sessions = (req, res, next) => {
         //Log this request
         registerRequest: () => {
           _sessions[req.sessionID].requests.push({ path: req.url, method: req.method });
-          lg(`[${req.sessionID}]: ${req.method} request to ${req.url}`, logPrefix);
+          lg(`${_shortID(req.sessionID)} ${req.method} ${req.url}`, logPrefix);
         },
         
         //Return entire requests array
@@ -78,7 +81,7 @@ const sessions = (req, res, next) => {
       const sessionID = _initSessionObject();
       req.sessionID = sessionID;
       res.cookie("session_id", sessionID);
-      lg(`[${sessionID}] New session for ${req.socket.remoteAddress}:${req.socket.remotePort}`, logPrefix);
+      lg(`${_shortID(req.sessionID)} New session for ${req.socket.remoteAddress}:${req.socket.remotePort}`, logPrefix);
     }
 
     //Ensure req.sessionID is defined (already so if this is a new session; otherwise assign cookie value)
