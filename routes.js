@@ -5,16 +5,8 @@ const database = require("./database");
 const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
-////Routing-middleware: redirect to /login if not authorized
-// const redirectIfUnauthorized = (req, res, next) => {
-//   if (!database.getUserByID(req.session.getUserID())) {
-//     return res.redirect("/login");
-//   }
-//   next();
-// };
-
+//Middleware to secure protected routes
 const redirectIfUnauthorized = require("./middleware/routing_middleware/redirectIfUnauthorized");
-
 
 const registerRoutes = (app) => {
 
@@ -53,7 +45,7 @@ const registerRoutes = (app) => {
   //Render user registration form
   app.get('/register', (req, res) => {
     req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_BEFORE);
-    const templateVars = { user:database.users[req.session.getUserID()], flash: req.flash() };
+    const templateVars = { user:database.getUserByID(req.session.getUserID()), flash: req.flash() };
     res.render('register', templateVars);
   });
 
@@ -109,7 +101,7 @@ const registerRoutes = (app) => {
     const noUrls = Object.keys(urlsForUser).length;
     const templateVars = {
       urls: urlsForUser,
-      user:database.users[req.session.getUserID()],
+      user: database.getUserByID(req.session.getUserID()),
       flash: req.flash()
     };
     if (!noUrls) {
@@ -142,7 +134,7 @@ const registerRoutes = (app) => {
 
   //Render form to create a new shortURL (must be logged in)
   app.get('/urls/new', redirectIfUnauthorized, (req, res) => {
-    const templateVars = { user:database.users[req.session.getUserID()], flash: req.flash() };
+    const templateVars = { user:database.getUserByID(req.session.getUserID()), flash: req.flash() };
     res.render('urls_new', templateVars);
   });
 
@@ -150,7 +142,7 @@ const registerRoutes = (app) => {
   app.delete('/urls/:shortURL/delete', redirectIfUnauthorized, (req, res) => {
     const shortURL = req.params.shortURL;
     lg(`User ${req.session.getUserID()} deleted shortURL ${shortURL}`);
-    delete database.urls[req.params.shortURL];
+    database.deleteURL(req.params.shortURL);
     res.redirect('/urls');
   });
 
@@ -162,7 +154,7 @@ const registerRoutes = (app) => {
       database.updateURL(req.params.shortURL, longURL);
       lg(`User ${req.session.getUserID()} updated shortURL ${req.params.shortURL} to ${longURL}`);
       req.flash(constants.FLASH_MESSAGES.EDIT_URL.SUCCESS_UPDATE);
-      res.redirect('/urls');
+      res.redirect(`/urls/${req.params.shortURL}`);
     } else {
       //New URL is invalid - redirect user to try again
       req.flash(constants.FLASH_MESSAGES.EDIT_URL.BAD_URL);
@@ -178,7 +170,7 @@ const registerRoutes = (app) => {
       const templateVars = {
         shortURL,
         URLObject,
-        user:database.users[req.session.getUserID()],
+        user:database.getUserByID(req.session.getUserID()),
         fullLocalHref: `${req.protocol}://${req.get('host')}/u/${shortURL}`,
         analytics: database.getAnalytics(`/u/${shortURL}`),
         flash: req.flash(),
