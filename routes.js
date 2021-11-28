@@ -6,7 +6,7 @@ const helpers = require("./helpers");
 const { lg } = require("@jowe81/lg");
 
 //Middleware to secure protected routes
-const redirectIfUnauthorized = require("./middleware/routing_middleware/redirectIfUnauthorized");
+const redirectIfUnauthorized = require("./middleware/routing/redirectIfUnauthorized");
 
 const registerRoutes = (app) => {
 
