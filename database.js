@@ -159,7 +159,7 @@ const getUniqueVisitors = (path) => {
 };
 
 //No of unique visitors to page path
-const getUniqueVisitorsCount = (path) => getUniqueVisitors(path).length;
+const uniqueVisitorsCount = (path) => getUniqueVisitors(path).length;
 
 //Log visit from visitorID to URL-path path
 const registerVisit = (path, visitorID) => {
@@ -182,7 +182,22 @@ const registerVisit = (path, visitorID) => {
   analytics[path].push(createVisitRecord(visitorID));
 };
 
+//Return analytics data for path
+const getAnalytics = (path) => {
+  const analytics = {
+    uniqueVisitorsCount: 0,
+    totalVisits: 0,
+    visits: []
+  };
 
+  const pageRecord = getPageRecord(path);
+  if (pageRecord) {
+    analytics.uniqueVisitorsCount = uniqueVisitorsCount(path);
+    analytics.totalVisits = pageRecord.length;
+    analytics.visits = pageRecord;
+  }
+  return analytics;
+};
 
 
 
@@ -211,6 +226,7 @@ module.exports = {
   getVisitCount,
   hasVisited,
   getUniqueVisitors,
-  getUniqueVisitorsCount,
+  uniqueVisitorsCount,
   registerVisit,
+  getAnalytics,
 };
