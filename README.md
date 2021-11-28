@@ -7,21 +7,23 @@ A URL-shortening app.
 
 ### Keep a catalogue of shortened URLs:
 Unwieldy URLs like
+* ```http://www.lighthouselabs.com``` (okay that one's not so unwieldy), or
 * ```https://www.facebook.com/photo/?fbid=10204711107795638&set=a.2317713580351```, or
 * ```https://www.amazon.ca/blackfriday?ref_=CA_BF21_DO_GW_DeskTab_ATFCard&pf_rd_r=VWYGH62D6HKK171SRWD4&pf_rd_p=4c112fb5-d76d-4e32-8f98-3b20651f9423&pd_rd_r=42c5f9c7-4972-4bd3-b929-3fa596579e03&pd_rd_w=OuWJ1&pd_rd_wg=8lGTD```, or
 * ...you get the idea!
 
-become something like: ```[path to app]/urls/ZcnjuZ```
+become something like: ```[app]/u/ZcnjuZ```
 
-### Little things implemented in addition to the LHL requirements:
+### Little things implemented in addition to the LHL/stretch requirements:
 * Informative flash messages
-* Flash messages and redirects instead of non-200 status codes
-* URL sanity check/verification with regular expressions
-* Pre-focus input fields
+* Redirects and flash messages instead of non-200 status codes and blank pages
+* URL and email address sanity checks/verification with regular expressions
+* Pre-focus input fields in forms
 * Sort list of URLs by lexically by long URL 
-* App icon (favicon )
-* Session and flash middleware implemented from scratch
+* App icon (favicon)
+* Session, flash, and analytics middleware implemented from scratch
 * Some console output (server side)
+* Some client side (modularized) JS and CSS
 
 ## Instructions
 ### Install it:
@@ -48,10 +50,17 @@ Terminate the server with `CTRL + C`.
 ![tinyapp-screen-shot.png](./tinyapp-screen-shot.png)
 
 ## Dependencies
-* [chalk ^4.1.2](https://www.npmjs.com/package/chalk)
+
+### Backend (Server)
 * [bcrypt ^5.0.1](https://www.npmjs.com/package/bcrypt)
 * [body-parser ^1.19.0](https://www.npmjs.com/package/body-parser)    
 * [cookie-parser ^1.4.6](https://www.npmjs.com/package/cookie-parser)
+* [method-override ^3.0.0](https://www.npmjs.com/package/method-override)
 * [ejs ^3.1.6](https://www.npmjs.com/package/ejs)
 * [express ^4.17.1](https://www.npmjs.com/package/express)
 * [@jowe81/lg ^1.0.0](https://www.npmjs.com/package/@jowe81/lg)
+
+### Frontend (Browser)
+* [Bootstrap](http://getbootstrap.com)
+* [JQuery](http://jquery.com)
+* [Popper](popper.js.org)
