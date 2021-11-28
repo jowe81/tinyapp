@@ -106,7 +106,11 @@ const registerRoutes = (app) => {
   app.get(['/urls','/'], redirectIfUnauthorized, (req, res) => {
     const urlsForUser = database.urlsForUser(req.session.getUserID());
     const noUrls = Object.keys(urlsForUser).length;
-    const templateVars = { urls: urlsForUser, user:database.users[req.session.getUserID()], flash: req.flash() };
+    const templateVars = {
+      urls: urlsForUser,
+      user:database.users[req.session.getUserID()],
+      flash: req.flash()
+    };
     if (!noUrls) {
       req.flash(constants.FLASH_MESSAGES.URL_INDEX.NO_RECORDS);
     }
@@ -175,6 +179,7 @@ const registerRoutes = (app) => {
         URLObject,
         user:database.users[req.session.getUserID()],
         fullLocalHref: `${req.protocol}://${req.get('host')}/u/${shortURL}`,
+        analytics: database.getAnalytics(`/u/${shortURL}`),
         flash: req.flash(),
       };
       res.render('urls_show', templateVars);
