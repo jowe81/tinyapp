@@ -12,8 +12,10 @@
 
           <h5 class="card-title">Details for <%= URLObject.longURL %></h5>
 
-          <p class="card-text">Short URL: <a href="<%= fullLocalHref %>"><%= fullLocalHref %></a> (<%= shortURL %>)</p>
+          <!-- ShortURL -->
+          <p class="card-text">Short URL: <%= shortURL %> - <a href="<%= fullLocalHref %>" target="_BLANK"><%= fullLocalHref %></a></p>
 
+          <!-- Edit form -->
           <h5 class="card-title"></h5>
           <div class="d-flex justify-content-center">
             <form class="form-inline" method="POST" action = "/urls/<%= shortURL %>/update?_method=PUT">
@@ -23,7 +25,7 @@
           </div>
 
           
-
+          <!-- Analytics -->
           <h5 class="mt-4 card-title">Analytics: %></h5>
           <% if (typeof analytics === 'object' && analytics.totalVisits > 0) { %>
             <p class="card-text">Total Visits: <%= analytics.totalVisits %></p>
