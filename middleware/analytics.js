@@ -11,7 +11,7 @@ const analytics = (req, res, next) => {
 
   return (req, res, next) => {
     //Register this visit to this path
-    lg(`Registering visit to ${req.url} by session ${req.sessionID}`, logPrefix);
+    lg(`Registering visit to ${req.url}`, logPrefix);
     database.registerVisit(req.url, req.sessionID);
     next();
   };

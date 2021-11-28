@@ -63,7 +63,8 @@ const registerRoutes = (app) => {
       //Form data is valid, attempt creation of new user record
       const newUserID = database.addUser(req.body.email, req.body.password);
       if (newUserID) {
-        lg(`Added user ${JSON.stringify(database.users[newUserID])}`);
+        const user = database.getUserByID(newUserID);
+        lg(`User ${newUserID} registered with email ${user.email}`);
         req.flash(constants.FLASH_MESSAGES.REGISTER.WELCOME_AFTER);
         req.session.registerLogin(newUserID);
         return res.redirect('/'); //not using /urls because I couldn't find a way to change the request method to GET for the redirect
@@ -114,7 +115,6 @@ const registerRoutes = (app) => {
     if (!noUrls) {
       req.flash(constants.FLASH_MESSAGES.URL_INDEX.NO_RECORDS);
     }
-    lg(`Rendering list with ${noUrls} URLs for ${database.getUserByID(req.session.getUserID()).email}`);
     res.render('urls_index', templateVars);
   });
 
@@ -125,7 +125,7 @@ const registerRoutes = (app) => {
       const longURL = helpers.verifyURL(req.body.longURL);
       if (longURL) {
         const shortURL = database.addURL(longURL, req.session.getUserID());
-        lg(`User ${database.getUserByID(req.session.getUserID()).email} created shortURL ${shortURL} for ${longURL}`);
+        lg(`User ${req.session.getUserID()} created shortURL ${shortURL} for ${longURL}`);
         req.flash(constants.FLASH_MESSAGES.EDIT_URL.SUCCESS_CREATE);
         res.redirect(`/urls/${shortURL}`);
       } else {
@@ -149,7 +149,7 @@ const registerRoutes = (app) => {
   //Delete entry (must be logged in), redirect to index
   app.delete('/urls/:shortURL/delete', redirectIfUnauthorized, (req, res) => {
     const shortURL = req.params.shortURL;
-    lg(`Deleting ${shortURL} (requested by ${req.socket.remoteAddress}:${req.socket.remotePort})`);
+    lg(`User ${req.session.getUserID()} deleted shortURL ${shortURL}`);
     delete database.urls[req.params.shortURL];
     res.redirect('/urls');
   });
@@ -160,6 +160,7 @@ const registerRoutes = (app) => {
     if (longURL) {
       //Success - updated URL verified
       database.updateURL(req.params.shortURL, longURL);
+      lg(`User ${req.session.getUserID()} updated shortURL ${req.params.shortURL} to ${longURL}`);
       req.flash(constants.FLASH_MESSAGES.EDIT_URL.SUCCESS_UPDATE);
       res.redirect('/urls');
     } else {
