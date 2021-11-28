@@ -27,6 +27,7 @@
           
           <!-- Analytics -->
           <h5 class="mt-4 card-title">Analytics: %></h5>
+          <p class="card-text">As of <%= analytics.timeUpdated.toLocaleTimeString() %> (<a href="">reload to update</a>)</p>
           <% if (typeof analytics === 'object' && analytics.totalVisits > 0) { %>
             <p class="card-text">Total Visits: <%= analytics.totalVisits %></p>
             <p class="card-text">Unique Visitors: <%= analytics.uniqueVisitorsCount %></p>
