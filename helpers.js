@@ -85,10 +85,12 @@ const verifyURL = (url) => {
   return false;
 };
 
+
 module.exports = {
   generateID,
   generateUserID,
   generateSessionID,
   isValidEmail,
   emailExists,
-  verifyURL };
+  verifyURL,
+};
