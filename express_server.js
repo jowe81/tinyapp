@@ -37,6 +37,5 @@ registerRoutes(app);
 const port = args.port > 0 ? args.port : constants.PORT;
 
 app.listen(port, () => {
-  lg(`Server listening on port ${port}`, "App");
+  lg(`Listening on port ${port}`);
 });
-
