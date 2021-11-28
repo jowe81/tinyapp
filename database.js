@@ -185,6 +185,7 @@ const registerVisit = (path, visitorID) => {
 //Return analytics data for path
 const getAnalytics = (path) => {
   const analytics = {
+    timeUpdated: new Date(),
     uniqueVisitorsCount: 0,
     totalVisits: 0,
     visits: []
