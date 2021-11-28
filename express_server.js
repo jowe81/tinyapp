@@ -22,6 +22,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:true}));
 const sessions = require("./middleware/sessions");
 app.use(sessions());
+const analytics = require("./middleware/analytics");
+app.use(analytics());
 const flash = require("./middleware/flash");
 app.use(flash());
 
