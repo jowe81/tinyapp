@@ -22,6 +22,8 @@ const updateURL = (shortURL, longURL) => {
   urls[shortURL].longURL = longURL;
 };
 
+const deleteURL = (shortURL) => delete urls[shortURL];
+
 //Return a URL object. If userID is provided, only return if user owns the object.
 const getURL = (shortURL, userID) => {
   return !userID || urls[shortURL].userID === userID ? urls[shortURL] : false;
@@ -204,16 +206,15 @@ const getAnalytics = (path) => {
 
 module.exports = {
   //URL Database functions
-  urls,
   addURL,
   updateURL,
+  deleteURL,
   getURL,
   sortURLs,
   getURLs,
   urlsForUser,
 
   //Users Database functions
-  users,
   addUser,
   getUserByID,
   getUserByEmail,
@@ -221,7 +222,6 @@ module.exports = {
   validateUserID,
 
   //Analytics Database functions
-  analytics,
   getPageRecord,
   getVisits,
   getVisitCount,
