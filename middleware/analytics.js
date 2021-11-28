@@ -1,27 +1,18 @@
 //analytics.js: middleware
 
 const database = require("../database");
+const { lg } = require("@jowe81/lg");
+
+const logPrefix = '-Altcs';
 
 //Super simple analytics: register each visit to each path
 const analytics = (req, res, next) => {
+  lg(`Registering middleware (analytics)`, logPrefix);
 
   return (req, res, next) => {
-    
-    //Init the middleware
-    if (!req.analytics) {
-
-      req.analytics = {
-
-        registerVisit: () => {
-          database.registerVisit(req.url, req.cookies.sessionID);
-        }
-
-      };
-
-    }
-
     //Register this visit to this path
-    req.analytics.registerVisit();
+    lg(`Registering visit to ${req.url} by session ${req.sessionID}`, logPrefix);
+    database.registerVisit(req.url, req.sessionID);
     next();
   };
 
