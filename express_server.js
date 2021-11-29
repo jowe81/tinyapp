@@ -41,11 +41,19 @@ const input = require("./input");
 
 //Catch termination requests (q/CTRL+C)
 input.onTerminate('q', () => {
-  lg(`Shutting down`);
-  database.persistToFile(() => {
+  lg(`Shutting down...`);
+  database.persistToFile().catch(() => {
+    lg(`Unable to save database to file - quitting anyway...`);
+  }).finally(() => {
     lg(`Thanks for using TinyApp - Goodbye!`);
     process.exit();
   });
+});
+
+//Terminate without saving database to file
+input.on('x', () => {
+  lg(`Thanks for using TinyApp - Goodbye!`);
+  process.exit();
 });
 
 //****** Start TinyApp Server ********************
@@ -55,8 +63,10 @@ const args = require("./args");
 const port = args.port > 0 ? args.port : constants.PORT;
 
 //Restore database from file and start listening
-//The promise resolves always: if readFile fails, default data is used
-database.initFromFile().then(()=>{
+//- In case the promise rejects, default data is used
+database.initFromFile().catch(() => {
+  lg(`Database init from file failed; using default records`);
+}).finally(()=>{
   app.listen(port, () => {
     lg(`Listening on port ${port}`);
   });
