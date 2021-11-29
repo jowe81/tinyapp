@@ -24,8 +24,7 @@ app.use(bodyParser.urlencoded({extended:true}));
 const sessions = require("./middleware/sessions"); //My own basic sessions
 app.use(sessions());
 const analytics = require("./middleware/analytics"); //My own basic analytics
-analytics.addPath("/u/"); //Only track visits of short urls, not the whole app
-app.use(analytics.analytics());
+app.use(analytics.analytics('/u/')); //Only track visits of short urls, not the whole app
 const flash = require("./middleware/flash"); //My own basic flash messages
 app.use(flash());
 

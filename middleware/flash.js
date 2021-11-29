@@ -3,7 +3,7 @@
 const { lg } = require("@jowe81/lg");
 
 //Super simple flash messages
-const flash = (req, res, next) => {
+const flash = () => {
   lg(`Registering middleware (flash)`,'-Flash');
 
   //Store flash messages in this closure - use sessionID as key

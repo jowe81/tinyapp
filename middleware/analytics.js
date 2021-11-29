@@ -25,8 +25,11 @@ const addPath = (path) => {
 };
 
 //Super simple analytics: register each visit to each path
-const analytics = (req, res, next) => {
+const analytics = (path) => {
   lg(`Registering middleware (analytics)`, logPrefix);
+
+  //Register path that was passed in at initialization time
+  if (path) addPath(path);
 
   return (req, res, next) => {
     //Register this visit if it is to a path that we are tracking

@@ -6,7 +6,7 @@ const helpers = require("../helpers");
 const logPrefix = '-Sessn';
 
 //Super simple sessions
-const sessions = (req, res, next) => {
+const sessions = () => {
   lg(`Registering middleware (sessions)`, logPrefix);
 
   //Store sessions in this closure
