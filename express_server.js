@@ -5,12 +5,9 @@ const { lg, prefix } = require("@jowe81/lg");
 prefix.set("Server");
 lg(`TinyApp server starting...`);
 
-
-//***** Init constants and database **************
+//****** Init constants and database defaults ****
 const constants = require("./constants");
 const database = require("./database");
-database.initFromFile();
-
 
 //****** ExpressJS setup *************************
 const express = require("express");
@@ -39,7 +36,6 @@ app.set('view engine','ejs');
 const { registerRoutes } = require("./routes");
 registerRoutes(app);
 
-
 //****** Keyboard listeners **********************
 const input = require("./input");
 
@@ -52,13 +48,16 @@ input.onTerminate('q', () => {
   });
 });
 
-
 //****** Start TinyApp Server ********************
 
 //Get port from command line or fall back to constants.js
 const args = require("./args");
 const port = args.port > 0 ? args.port : constants.PORT;
 
-app.listen(port, () => {
-  lg(`Listening on port ${port}`);
+//Restore database from file and start listening
+//The promise resolves always: if readFile fails, default data is used
+database.initFromFile().then(()=>{
+  app.listen(port, () => {
+    lg(`Listening on port ${port}`);
+  });
 });
