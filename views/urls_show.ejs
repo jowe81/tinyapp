@@ -37,6 +37,8 @@
                 <th scope="row">Visitor ID</th>
               </tr>
               <% analytics.visits.forEach((visit) => { %>
+                <!-- Convert visit.time to Date object if its a string (which will be the case if the database was restored from  file) -->
+                <% if (typeof visit.time === 'string') visit.time = new Date(visit.time); %>
                 <tr>
                   <td><%= visit.time.toLocaleDateString() %>, <%= visit.time.toLocaleTimeString() %></td>
                   <td><%= visit.visitorID.substr(0,12) %>[...]</td>
