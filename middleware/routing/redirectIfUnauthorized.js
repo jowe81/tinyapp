@@ -1,8 +1,8 @@
 //redirectIfUnauthorized.js: routing-middleware
 // - redirect to /login if user is not logged in
 
-const lg = require("@jowe81/lg");
-const logPrefix = "-redir";
+const { lg } = require("@jowe81/lg");
+const logPrefix = "-Redir";
 
 const database = require("../../database");
 
