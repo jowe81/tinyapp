@@ -15,7 +15,57 @@ Unwieldy URLs like
 
 become something like: ```[app]/u/ZcnjuZ```
 
-### LHL stretch requirements implement:
+## Instructions
+### Install it:
+```bash
+git clone https://github.com/jowe81/tinyapp
+cd tinyapp
+npm install
+```
+### Configure it:
+* Visit the configuration file, ```constants.js``` to adjust TCP port, persistence, and security settings.
+* Note that command line arguments take precedence over settings in ```constants.js```.
+
+### Run it:
+```bash
+npm run tinyapp
+```
+Optional command line arguments:
+```bash
+npm run tinyapp -- [-port port] [-init-from-file true | false]
+```
+* Visit ```http://localhost:8080``` (or the port# you specifed) in your browser to use the app.
+
+* Terminate the server with `q` or `CTRL + C`. If so specified in ```constants.js```, data will be persisted in the specified file in the ```./app_data``` directory.
+
+* To force-terminate without persistence, irrespective of ```constants.js```, type `x`.
+
+* To force-terminate with persistence, irrespective of ```constants.js```, type `s`.
+
+## Dependencies
+
+### Backend (Server)
+* [bcrypt ^5.0.1](https://www.npmjs.com/package/bcrypt)
+* [body-parser ^1.19.0](https://www.npmjs.com/package/body-parser)    
+* [cookie-parser ^1.4.6](https://www.npmjs.com/package/cookie-parser)
+* [method-override ^3.0.0](https://www.npmjs.com/package/method-override)
+* [ejs ^3.1.6](https://www.npmjs.com/package/ejs)
+* [express ^4.17.1](https://www.npmjs.com/package/express)
+* [@jowe81/lg ^1.0.0](https://www.npmjs.com/package/@jowe81/lg)
+* Developed on Node 15.14.0
+
+### Frontend (Browser)
+* [Bootstrap](http://getbootstrap.com)
+* [JQuery](http://jquery.com)
+* [Popper](popper.js.org)
+
+## Screenshots
+### URL Index Page
+![tinyapp-index.png](./docs/tinyapp-index.png)
+### URL Info Page
+![tinyapp-view-and-stats](./docs/tinyapp-view-and-stats.png)
+
+### LHL stretch requirements implemented:
 * Method Override
 * Analytics
 
@@ -40,51 +90,6 @@ become something like: ```[app]/u/ZcnjuZ```
 * Command line arguments
 * setTimeout (urls_show.ejs -> reload info page after following link)
 
-
-## Instructions
-### Install it:
-```bash
-git clone https://github.com/jowe81/tinyapp
-cd tinyapp
-npm install
-```
-### Configure it:
-* Visit the configuration file, ```constants.js``` to adjust TCP port, persistence, and security settings.
-* Note that command line arguments take precedence over settings in ```constants.js```.
-
-### Run it:
-```bash
-npm run tinyapp
-```
-Optional command line arguments:
-```bash
-npm run tinyapp -- [-port port] [-init-from-file true | false]
-```
-* Terminate the server with `q` or `CTRL + C`. If so specified in ```constants.js```, data will be persisted in the specified file in the ```./app_data``` directory.
-
-* To force-terminate without persistence, irrespective of ```constants.js```, type `x`.
-
-* To force-terminate with persistence, irrespective of ```constants.js```, type `s`.
-
-## Dependencies
-
-### Backend (Server)
-* [bcrypt ^5.0.1](https://www.npmjs.com/package/bcrypt)
-* [body-parser ^1.19.0](https://www.npmjs.com/package/body-parser)    
-* [cookie-parser ^1.4.6](https://www.npmjs.com/package/cookie-parser)
-* [method-override ^3.0.0](https://www.npmjs.com/package/method-override)
-* [ejs ^3.1.6](https://www.npmjs.com/package/ejs)
-* [express ^4.17.1](https://www.npmjs.com/package/express)
-* [@jowe81/lg ^1.0.0](https://www.npmjs.com/package/@jowe81/lg)
-
-### Frontend (Browser)
-* [Bootstrap](http://getbootstrap.com)
-* [JQuery](http://jquery.com)
-* [Popper](popper.js.org)
-
-## Screenshots
-### URL Index Page
-![tinyapp-index.png](./docs/tinyapp-index.png)
-### URL Info Page
-![tinyapp-view-and-stats](./docs/tinyapp-view-and-stats.png)
-
+### New learning outcomes
+* Write middleware (express)
+* Write routing middleware (express)
