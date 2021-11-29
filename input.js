@@ -18,8 +18,8 @@ const setupInput = (inputStream) => {
 };
 
 //Add a listener: calls cb on receiving character(s) (char may be string or array)
-const addKeyboardListener = (char, cb) => {
-  lg(`Listening for ${char}`, logPrefix);
+const on = (char, cb) => {
+  lg(`: Listening for keystroke: ${char}`, logPrefix);
   _stdin.on('data', data => {
     if (data === char || Array.isArray(char) && char.includes(data)) {
       cb();
@@ -29,7 +29,7 @@ const addKeyboardListener = (char, cb) => {
 
 const onTerminate = (char, cb) => {
   //Listen to the char passed, as well as CTRL+C
-  addKeyboardListener([char, "\u0003"],() => {
+  on([char, "\u0003"],() => {
     cb();
   });
 };
@@ -37,6 +37,6 @@ const onTerminate = (char, cb) => {
 setupInput(process.stdin);
 
 module.exports = {
-  addKeyboardListener,
+  on,
   onTerminate,
 };
