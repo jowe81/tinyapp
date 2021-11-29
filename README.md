@@ -51,7 +51,7 @@ npm run tinyapp -- [-port port] [-init-from-file true | false]
 * [ejs ^3.1.6](https://www.npmjs.com/package/ejs)
 * [express ^4.17.1](https://www.npmjs.com/package/express)
 * [@jowe81/lg ^1.0.0](https://www.npmjs.com/package/@jowe81/lg)
-* Developed on Node 15.14.0
+* Developed on Node 15.14.0 on Apple Silicon (M1)
 
 ### Frontend (Browser)
 * [Bootstrap](http://getbootstrap.com)
