@@ -27,4 +27,12 @@ class ClientHelpers {
     inputField.focus().val('').val(value);
   }
 
+  textToClipboard(inputField) {
+    console.log(inputField);
+    //Selet text in field
+    inputField.select();
+    //Copy
+    navigator.clipboard.writeText(inputField.value);
+  }
+
 }

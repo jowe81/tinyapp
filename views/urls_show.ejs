@@ -10,10 +10,12 @@
     <div class="card text-center">
         <div class="card-body">
 
-          <h5 class="card-title">Details for <%= URLObject.longURL %></h5>
+          <h4 class="card-title">Details for <%= URLObject.longURL %></h4>
 
           <!-- ShortURL -->
-          <p class="card-text">Short URL: <%= shortURL %> - <a id="visitShortURL" href="<%= fullLocalHref %>" target="_BLANK"><%= fullLocalHref %></a></p>
+          <p class="card-text">Short URL: <%= shortURL %> | <a id="copyToClipboard" href="#">copy shortlink to clipboard</a></p>
+          <p class="lead mb-4"><a id="visitShortURL" href="<%= fullLocalHref %>" target="_BLANK"><%= fullLocalHref %></a></p>
+          
 
           <!-- Edit form -->
           <h5 class="card-title"></h5>
@@ -52,6 +54,8 @@
       </div>
     </main>
     <%- include('partials/_scripts') %>
+    <!-- Helper for the copy-to-clipboard functionality -->
+    <input type="hidden" id="copyHelper" value="<%= fullLocalHref %>">
     <script>
       //If user is editing, get the input field ready by focusing and putting the cursor to the end
       if (clientHelpers.urlParam('edit')) {
@@ -63,6 +67,11 @@
         //Set short timer to reload this page after the link has been followed (in a new tab)
         setTimeout(() => location.reload(), 500);
       });
-    </script>
+
+      $("#copyToClipboard").click(() => {        
+        clientHelpers.textToClipboard(document.getElementById("copyHelper"));
+      });
+
+    </script>    
   </body>
 </html>
