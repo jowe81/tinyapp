@@ -4,9 +4,6 @@
 A URL-shortening app. 
 (Lighthouse Labs Flex Program Module 3 Project)
 
-## Features:
-
-### Keep a catalogue of shortened URLs:
 Unwieldy URLs like
 * ```http://www.lighthouselabs.com``` (okay that one's not so unwieldy), or
 * ```https://www.facebook.com/photo/?fbid=10204711107795638&set=a.2317713580351```, or
@@ -14,6 +11,8 @@ Unwieldy URLs like
 * ...you get the idea!
 
 become something like: ```[app]/u/ZcnjuZ```
+
+See a list of extra features/enhancements [at the end of this file](#enhancements).
 
 ## Instructions
 ### Install it:
@@ -64,6 +63,8 @@ npm run tinyapp -- [-port port] [-init-from-file true | false]
 ![tinyapp-index.png](./docs/tinyapp-index.png)
 ### URL Info Page
 ![tinyapp-view-and-stats](./docs/tinyapp-view-and-stats.png)
+
+## Enhancements
 
 ### LHL stretch requirements implemented:
 * Method Override
