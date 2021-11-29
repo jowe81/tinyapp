@@ -226,13 +226,13 @@ const persistToFile = () => {
 };
 
 //Attempt to initialize the database with data from constants.DB_FILE
-//- If this fails, defaults will be used as declared in each section (urls, user, analytics)
+//- If this fails, the promise will still resolve and defaults will be used
+//  as declared in each section (urls, user, analytics)
 const initFromFile = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fs.readFile(constants.DB_FILE, {encoding: 'utf8'}, (err, data) => {
       if (err) {
         lg(`Unable to init db from file - using in-memory defaults`, logPrefix);
-        reject();
       } else {
         let dataFromFile = {};
         lg(`Initializing database from file ${constants.DB_FILE}...`, logPrefix);
@@ -243,14 +243,12 @@ const initFromFile = () => {
           users = dataFromFile.users || users;
           analytics = dataFromFile.analytics || analytics;
           lg(`Database init from file completed successfully`, logPrefix);
-          resolve();
         } catch (e) {
           lg(`Error: reading database from ${constants.DB_FILE} failed: ${e.message}`, logPrefix);
-          reject();
         }
       }
-      resolve();
     });
+    resolve();
   });
 };
 
