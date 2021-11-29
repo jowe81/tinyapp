@@ -1,3 +1,4 @@
+![tinyapp-index.png](./docs/tinyapp-header.png)
 # TinyApp
 
 A URL-shortening app. 
@@ -59,14 +60,11 @@ Optional command line arguments:
 ```bash
 npm run tinyapp -- [-port port] [-init-from-file true | false]
 ```
-* Terminate the server with `q` or `CTRL + C`. If so specified in ```constants.js```, data will be persisted in ```./app_data/```.
+* Terminate the server with `q` or `CTRL + C`. If so specified in ```constants.js```, data will be persisted in the specified file in the ```./app_data``` directory.
 
-* To terminate without persistence, irrespective of ```constants.js```, type `x`.
+* To force-terminate without persistence, irrespective of ```constants.js```, type `x`.
 
-* To terminate with persistence, irrespective of ```constants.js```, type `s`.
-
-## Screenshot
-![tinyapp-screen-shot.png](./tinyapp-screen-shot.png)
+* To force-terminate with persistence, irrespective of ```constants.js```, type `s`.
 
 ## Dependencies
 
@@ -83,3 +81,10 @@ npm run tinyapp -- [-port port] [-init-from-file true | false]
 * [Bootstrap](http://getbootstrap.com)
 * [JQuery](http://jquery.com)
 * [Popper](popper.js.org)
+
+## Screenshots
+### URL Index Page
+![tinyapp-index.png](./docs/tinyapp-index.png)
+### URL Info Page
+![tinyapp-view-and-stats](./docs/tinyapp-view-and-stats.png)
+
