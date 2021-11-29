@@ -2,6 +2,9 @@ const constants = {
 
   PORT: 8080,
 
+  //Whether or not to store the database to a file on exit
+  PERSIST_TO_FILE: false,
+
   //File to persist the database to
   DB_FILE: "./app_data/database.js",
 
