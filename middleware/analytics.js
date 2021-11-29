@@ -31,8 +31,8 @@ const analytics = (req, res, next) => {
   return (req, res, next) => {
     //Register this visit if it is to a path that we are tracking
     if (haveMatchingPath(req.url)) {
-      lg(`Registering visit to ${req.url}`, logPrefix);
       database.registerVisit(req.url, req.sessionID);
+      lg(`Registered visit to ${req.url} (now ${database.getVisitCount(req.url, req.sessionID)} visit(s))`, logPrefix);
     }
     next();
   };
