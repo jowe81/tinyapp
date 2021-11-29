@@ -14,16 +14,31 @@ Unwieldy URLs like
 
 become something like: ```[app]/u/ZcnjuZ```
 
-### Little things implemented in addition to the LHL/stretch requirements:
+### LHL stretch requirements implement:
+* Method Override
+* Analytics
+
+### Little things implemented in addition the stretch requirements:
 * Informative flash messages
 * Redirects and flash messages instead of non-200 status codes and blank pages
 * URL and email address sanity checks/verification with regular expressions
 * Pre-focus input fields in forms
+* Copy shortlink to clipboard functionality
 * Sort list of URLs by lexically by long URL 
 * App icon (favicon)
-* Session, flash, and analytics middleware implemented from scratch
-* Some console output (server side)
+* Session, flash, and analytics middleware (from scratch)
+* Informative console output (server side)
 * Some client side (modularized) JS and CSS
+* Database persistence 
+
+### Some of the previous lerning put to use in this project:
+* Promises (database persistence functions)
+* Taking callbacks (middleware functions)
+* Classes/objects (clientHelpers.js)
+* Capture keystrokes (server)
+* Command line arguments
+* setTimeout (urls_show.ejs -> reload info page after following link)
+
 
 ## Instructions
 ### Install it:
@@ -33,18 +48,22 @@ cd tinyapp
 npm install
 ```
 ### Configure it:
-* Visit the configuration file, ```constants.js``` to adjust the TCP port and security settings. Default port is 8080.
-* Note that the command line argument takes precedence over settings in ```constants.js```.
+* Visit the configuration file, ```constants.js``` to adjust TCP port, persistence, and security settings.
+* Note that command line arguments take precedence over settings in ```constants.js```.
 
 ### Run it:
 ```bash
 npm run tinyapp
 ```
-With optional command line argument:
+Optional command line arguments:
 ```bash
-npm run tinyapp -- [-port port]
+npm run tinyapp -- [-port port] [-init-from-file true | false]
 ```
-Terminate the server with `CTRL + C`.
+* Terminate the server with `q` or `CTRL + C`. If so specified in ```constants.js```, data will be persisted in ```./app_data/```.
+
+* To terminate without persistence, irrespective of ```constants.js```, type `x`.
+
+* To terminate with persistence, irrespective of ```constants.js```, type `s`.
 
 ## Screenshot
 ![tinyapp-screen-shot.png](./tinyapp-screen-shot.png)
