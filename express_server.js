@@ -4,6 +4,19 @@ const constants = require("./constants");
 const args = require("./args");
 const { registerRoutes } = require("./routes");
 
+//Init database
+const database = require("./database");
+database.initFromFile();
+
+const input = require("./input");
+input.onTerminate('q', () => {
+  lg(`Shutting down`);
+  database.persistToFile(() => {
+    lg(`Thanks for using TinyApp - Goodbye!`);
+    process.exit();
+  });
+});
+
 //Setup logging
 const { lg, prefix } = require("@jowe81/lg");
 prefix.set("Server");

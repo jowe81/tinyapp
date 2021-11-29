@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const constants = require("./constants");
 const { lg } = require("@jowe81/lg");
 
+const logPrefix = "DB";
 
 //************** URLS data and methods ******************
 
@@ -206,13 +207,44 @@ const getAnalytics = (path) => {
 
 
 //*********************** Persistence ********************
+const fs = require('fs');
 
-const persistToFile = () => {
+//Attempt to persist data to constants.DB_FILE
+const persistToFile = (cb) => {
+  lg(`Persisting in-memory database to ${constants.DB_FILE}...`, logPrefix);
+  fs.writeFile(constants.DB_FILE, JSON.stringify({ urls, users, analytics }), err => {
+    if (err) {
+      lg(`Error: couldn't persist database to ${constants.DB_FILE}`, logPrefix);
+    } else {
+      lg(`Persisted database to ${constants.DB_FILE}`, logPrefix);
+    }
+    if (cb) cb(err);
+  });
 };
 
-const initFromFile = () => {
+//Attempt to initialize the database with data from constants.DB_FILE
+//If this fails, defaults will be used as declared in each section (urls, user, analytics)
+const initFromFile = (cb) => {
+  fs.readFile(constants.DB_FILE, {encoding: 'utf8'}, (err, data) => {
+    if (err) {
+      lg(`Unable to init db from file - using in-memory defaults`, logPrefix);
+    } else {
+      let dataFromFile = {};
+      lg(`Initializing database from file ${constants.DB_FILE}...`, logPrefix);
+      try {
+        dataFromFile = JSON.parse(data);
+        lg(`Database init complete`, logPrefix);
+      } catch (e) {
+        lg(`Error: reading database from ${constants.DB_FILE} failed: ${e.message}`, logPrefix);
+      }
+      //Where present in dataFromFile, replace data for urls, users, analytics
+      urls = dataFromFile.urls || urls;
+      users = dataFromFile.users || users;
+      analytics = dataFromFile.analytics || analytics;
+    }
+    if (cb) cb(err);
+  });
 };
-
 
 module.exports = {
   //URL Database functions
