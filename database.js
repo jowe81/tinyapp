@@ -282,4 +282,8 @@ module.exports = {
   //Persistence
   persistToFile,
   initFromFile,
+
+  //RE-EXPORT DATA OBJECTS FOR TESTING/EVALUATION PURPOSES ONLY (otherwise some tests would fail)
+  users,
+  urls,
 };
