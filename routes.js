@@ -7,6 +7,7 @@ const { lg } = require("@jowe81/lg");
 
 //Middleware to secure protected routes
 const redirectIfUnauthorized = require("./middleware/routing/redirectIfUnauthorized");
+const sendErrorIfUnauthorized = require("./middleware/routing/sendErrorIfUnauthorized");
 
 const registerRoutes = (app) => {
 
@@ -95,8 +96,13 @@ const registerRoutes = (app) => {
     res.redirect("/login");
   });
 
+  //Redirect requests to homepage to login if they're not logged in, to /urls otherwise
+  app.get('/', redirectIfUnauthorized, (req, res) => {
+    res.redirect('/urls');
+  });
+
   //Render a list of all stored URLs for this user (must be logged in)
-  app.get(['/urls','/'], redirectIfUnauthorized, (req, res) => {
+  app.get('/urls', sendErrorIfUnauthorized, (req, res) => {
     const urlsForUser = database.urlsForUser(req.session.getUserID());
     const noUrls = Object.keys(urlsForUser).length;
     const templateVars = {
@@ -163,23 +169,24 @@ const registerRoutes = (app) => {
   });
 
   //Render info/edit page for URL indicated by :shortURL (must be logged in AND own the URL)
-  app.get('/urls/:shortURL', redirectIfUnauthorized, (req, res) => {
+  app.get('/urls/:shortURL', sendErrorIfUnauthorized, (req, res) => {
     const shortURL = req.params.shortURL;
     const URLObject = database.getURL(shortURL, req.session.getUserID());
+    const templateVars = {
+      user: database.getUserByID(req.session.getUserID()),
+      flash: req.flash()
+    };
     if (URLObject) {
-      const templateVars = {
-        shortURL,
-        URLObject,
-        user:database.getUserByID(req.session.getUserID()),
-        fullLocalHref: `${req.protocol}://${req.get('host')}/u/${shortURL}`,
-        analytics: database.getAnalytics(`/u/${shortURL}`),
-        flash: req.flash(),
-      };
+      templateVars.shortURL = shortURL;
+      templateVars.URLObject = URLObject;
+      templateVars.fullLocalHref = `${req.protocol}://${req.get('host')}/u/${shortURL}`;
+      templateVars.analytics = database.getAnalytics(`/u/${shortURL}`);
       res.render('urls_show', templateVars);
     } else {
       //Invalid shortURL or forbidden (user doesn't own the shortURL) - redirect to URL list
       lg(`Invalid shortURL or unauthorized request from ${req.socket.remoteAddress}:${req.socket.remotePort}`);
-      res.redirect(`/urls`);
+      templateVars.errorMessage = "Error: You are trying to access an URL that you do not own.";
+      res.status(401).render("error", templateVars);
     }
   });
 
