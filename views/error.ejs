@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('partials/_meta_and_link') %>
+    <title>Error - TinyApp</title>
+  </head>
+  <body>
+    <%- include('partials/_header') %>
+    <main style="margin: 1em;">
+      <div class="mx-auto p-4 error">
+        <h4>Unfortunately, An Error Occurred</h4>
+        <div><%- errorMessage %></div>
+      </div>
+    </main>
+    <%- include('partials/_scripts') %>
+  </body>
+</html>
